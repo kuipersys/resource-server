@@ -1,0 +1,15 @@
+﻿{
+  "$type": "PlatformRequestExecutionContext",
+  "inputParameters": {
+    "target": {
+      "$type": "SystemObject",
+      "apiVersion": "v1",
+      "metadata": {
+        "labels": {},
+        "annotations": {}
+      }
+    }
+  },
+  "outputParameters": {},
+  "sharedVariables": {}
+}

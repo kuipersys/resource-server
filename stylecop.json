@@ -1,0 +1,9 @@
+﻿{
+  "$schema": "https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json",
+  "settings": {
+    "documentationRules": {
+      "companyName": "Kuiper Microsystems, LLC",
+      "copyrightText": "© Kuiper Microsystems, LLC. All rights reserved.\nUnauthorized copying or use of this file, via any medium, is strictly prohibited.\nFor licensing inquiries, contact licensing@kuipersys.com"
+    }
+  }
+}

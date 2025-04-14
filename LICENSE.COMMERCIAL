@@ -1,0 +1,48 @@
+Kuiper Resource Server — Commercial License Terms
+===============================================
+
+Kuiper Resource Server is dual-licensed:
+
+1. Under the Apache License, Version 2.0 (see LICENSE)
+2. Under a separate Commercial License for closed-source or cloud-based use
+
+---
+
+Commercial License Overview
+---------------------------
+
+The Commercial License is intended for organizations who:
+
+- Wish to use Kuiper Resource Server in proprietary or closed-source products
+- Intend to offer Kuiper Resource Server as part of a **hosted SaaS**, **PaaS**, or **API-based service**
+- Require an alternative license that does not include the limitations of the Apache 2.0 license
+- Require commercial support, extended warranties, or private feature enhancements
+
+---
+
+SaaS Use Restriction
+--------------------
+
+Use of Kuiper Resource Server to operate a **hosted service**, including private or public cloud-based resource APIs, is **not permitted under the Apache 2.0 license**.
+
+Such use requires a Commercial License.
+
+---
+
+Obtaining a Commercial License
+------------------------------
+
+To obtain a commercial license, please contact:
+
+📧 licensing@kuipersys.com  
+🌐 https://kuipersys.com/licensing
+
+We offer flexible terms for:
+
+- Startups and indie teams
+- Enterprise SaaS integrations
+- Embedded or white-label software
+
+---
+
+For full legal terms and pricing, contact us directly.

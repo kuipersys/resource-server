@@ -1,0 +1,13 @@
+﻿$type: SystemObject
+apiVersion: v1
+kind: ServiceConfig
+metadata:
+  name: service-a
+  namespace: default
+  labels:
+    Xavier: saves
+    the: day
+    geo: us
+    region: westus
+    env: prod
+  annotations: {}

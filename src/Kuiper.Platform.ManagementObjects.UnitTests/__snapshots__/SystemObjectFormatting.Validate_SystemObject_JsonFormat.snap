@@ -1,0 +1,17 @@
+﻿{
+  "$type": "SystemObject",
+  "apiVersion": "v1",
+  "kind": "ServiceConfig",
+  "metadata": {
+    "name": "service-a",
+    "namespace": "default",
+    "labels": {
+      "geo": "us",
+      "region": "westus",
+      "env": "prod",
+      "Xavier": "saves",
+      "the": "day"
+    },
+    "annotations": {}
+  }
+}

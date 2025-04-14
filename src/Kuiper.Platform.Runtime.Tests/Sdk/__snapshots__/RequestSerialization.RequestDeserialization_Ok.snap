@@ -1,0 +1,13 @@
+﻿{
+  "message": "Put",
+  "inputParameters": {
+    "target": {
+      "$type": "SystemObject",
+      "apiVersion": "v1",
+      "metadata": {
+        "labels": {},
+        "annotations": {}
+      }
+    }
+  }
+}

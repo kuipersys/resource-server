@@ -1,0 +1,29 @@
+Kuiper Resource Server
+Copyright 2025 Kuiper Microsystems, LLC
+
+This product includes software developed by Kuiper Microsystems, LLC.
+
+Licensed under the Apache License, Version 2.0 (the "Apache License"):
+    https://www.apache.org/licenses/LICENSE-2.0
+
+You may not use this file except in compliance with the Apache License.
+
+---
+
+Dual Licensing Notice:
+----------------------
+
+Kuiper Resource Server is offered under a dual license:
+
+1. The Apache License, Version 2.0 — for open source and non-hosted use
+2. A Commercial License — for proprietary use and SaaS/hosted deployments
+
+Use of this software to provide a **hosted or cloud-based service** (SaaS, PaaS, APIs, etc.) is not permitted under the Apache License.
+
+For commercial licensing, please visit:
+    https://kuipersys.com/licensing
+    or contact licensing@kuipersys.com
+
+---
+
+SPDX-License-Identifier: Apache-2.0
