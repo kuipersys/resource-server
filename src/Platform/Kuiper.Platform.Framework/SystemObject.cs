@@ -1,0 +1,52 @@
+﻿// <copyright file="SystemObject.cs" company="Kuiper Microsystems, LLC">
+// © Kuiper Microsystems, LLC. All rights reserved.
+// Unauthorized copying or use of this file, via any medium, is strictly prohibited.
+// For licensing inquiries, contact licensing@kuipersys.com
+// </copyright>
+
+namespace Kuiper.Platform.Framework
+{
+    using System.ComponentModel.DataAnnotations;
+    using System.Text.Json.Serialization;
+
+    using NJsonSchema.Annotations;
+
+    [JsonSchemaIgnore]
+    [JsonDerivedType(typeof(SystemObject), nameof(SystemObject))]
+    public class SystemObject
+    {
+        [Required]
+        [JsonPropertyOrder(0)]
+        [JsonPropertyName("apiVersion")]
+        public string? ApiVersion { get; set; }
+
+        [Required]
+        [JsonPropertyOrder(1)]
+        [JsonPropertyName("kind")]
+        public string? Kind { get; set; }
+
+        [Required]
+        [JsonPropertyOrder(2)]
+        [JsonPropertyName("metadata")]
+        public SystemObjectMetadata Metadata { get; set; }
+            = new SystemObjectMetadata();
+
+        [JsonPropertyOrder(int.MaxValue)]
+        [JsonExtensionData]
+        public PropertyBag ExtensionData { get; set; } = new PropertyBag();
+
+        //public SystemObjectRef AsRef()
+        //{
+        //    return new SystemObjectRef
+        //    {
+        //        ApiVersion = this.ApiVersion,
+        //        Kind = this.Kind,
+        //        Link = this.Metadata?.SelfLink,
+        //        Name = this.Metadata?.Name,
+        //        Namespace = this.Metadata?.Namespace,
+        //        Uid = this.Metadata?.Uid,
+        //        Version = this.Metadata?.ResourceVersion
+        //    };
+        //}
+    }
+}

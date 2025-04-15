@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <!-- <ArtifactsPath>$(BaseArtifactsPath)\$(MSBuildThisFileName)</ArtifactsPath> -->
+    <!-- <PublishDir>$(ArtifactsPath)</PublishDir> -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Kuiper.ServiceInfra.Abstractions" />
+    <PackageReference Include="Kuiper.ServiceInfra.Persistence" />
+    <PackageReference Include="StyleCop.Analyzers" PrivateAssets="All" Condition="'$(SkipAnalysis)'!='true'" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Platform\Kuiper.Platform.ManagementObjects\Kuiper.Platform.ManagementObjects.csproj" />
+    <ProjectReference Include="..\..\Platform\Kuiper.Platform.Runtime\Kuiper.Platform.Runtime.csproj" />
+    <ProjectReference Include="..\..\Platform\Kuiper.Platform.Framework\Kuiper.Platform.Framework.csproj" />
+    <ProjectReference Include="..\..\Platform\Kuiper.Platform.Serialization\Kuiper.Platform.Serialization.csproj" />
+  </ItemGroup>
+
+</Project>

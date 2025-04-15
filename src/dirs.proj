@@ -1,18 +1,5 @@
 <Project Sdk="Microsoft.Build.Traversal">
   <ItemGroup>
-    <!-- Other Project Files to Include in Build -->
-    <ProjectFile Include="Kuiper.Platform.ManagementApi\Kuiper.Platform.ManagementApi.csproj" />
-    <!-- <ProjectFile Include="Kuiper.Platform.Configuration.Cli\Kuiper.Platform.Configuration.Cli.csproj" /> -->
-
-    <ProjectFile Include="Kuiper.Platform.ManagementObjects\Kuiper.Platform.ManagementObjects.csproj" />
-    <ProjectFile Include="Kuiper.Platform.ManagementObjects.UnitTests\Kuiper.Platform.ManagementObjects.UnitTests.csproj" />
-    
-    <ProjectFile Include="Kuiper.Platform.Runtime\Kuiper.Platform.Runtime.csproj" />
-    <ProjectFile Include="Kuiper.Platform.Runtime.Tests\Kuiper.Platform.Runtime.Tests.csproj" />
-    
-    <ProjectFile Include="Kuiper.Platform.Sdk\Kuiper.Platform.Sdk.csproj" />
-
-    <ProjectFile Include="Kuiper.Platform.Extensions\Kuiper.Platform.Extensions.csproj" />
-    <ProjectFile Include="Kuiper.Platform.Utilities\Kuiper.Platform.Utilities.csproj" />
+    <ProjectFile Include="**\*.csproj" />
   </ItemGroup>
 </Project>

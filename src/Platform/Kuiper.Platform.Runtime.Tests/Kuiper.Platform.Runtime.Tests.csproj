@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" />
+    <PackageReference Include="coverlet.collector" />
+    <PackageReference Include="Kuiper.Runtime.Serialization" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Shouldly" />
+    <PackageReference Include="Snapshooter.Xunit" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="StyleCop.Analyzers" PrivateAssets="All" Condition="'$(SkipAnalysis)'!='true'" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kuiper.Platform.Extensions.Contracts\Kuiper.Platform.Extensions.Contracts.csproj" />
+    <ProjectReference Include="..\Kuiper.Platform.Runtime\Kuiper.Platform.Runtime.csproj" />
+    <ProjectReference Include="..\Kuiper.Platform.Framework\Kuiper.Platform.Framework.csproj" />
+    <ProjectReference Include="..\Kuiper.Platform.Serialization\Kuiper.Platform.Serialization.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>

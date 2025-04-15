@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NJsonSchema" />
+    <PackageReference Include="System.Text.Json" />
+    <PackageReference Include="StyleCop.Analyzers" PrivateAssets="All" Condition="'$(SkipAnalysis)'!='true'" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kuiper.Platform.Framework\Kuiper.Platform.Framework.csproj" />
+    <ProjectReference Include="..\Kuiper.Platform.Serialization\Kuiper.Platform.Serialization.csproj" />
+  </ItemGroup>
+
+</Project>
