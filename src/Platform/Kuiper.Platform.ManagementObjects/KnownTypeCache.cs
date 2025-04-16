@@ -4,9 +4,11 @@
 // For licensing inquiries, contact licensing@kuipersys.com
 // </copyright>
 
-namespace Kuiper.Platform.Framework
+namespace Kuiper.Platform.ManagementObjects
 {
+    using System;
     using System.Collections.Concurrent;
+    using System.Collections.Generic;
 
     internal static class KnownTypeCache
     {

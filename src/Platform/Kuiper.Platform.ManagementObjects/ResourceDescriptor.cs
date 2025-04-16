@@ -4,8 +4,10 @@
 // For licensing inquiries, contact licensing@kuipersys.com
 // </copyright>
 
-namespace Kuiper.Platform.Framework
+namespace Kuiper.Platform.ManagementObjects
 {
+    using System;
+    using System.Collections.Generic;
     using System.Text.Json.Serialization;
 
     using Kuiper.Platform.Framework.Abstractions;

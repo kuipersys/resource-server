@@ -6,10 +6,10 @@
 
 namespace Kuiper.ResourceServer.Service.Plugins
 {
-    using Kuiper.Platform.Framework;
     using Kuiper.Platform.Framework.Abstractions;
     using Kuiper.Platform.Framework.Errors;
     using Kuiper.Platform.Framework.Extensibility;
+    using Kuiper.Platform.ManagementObjects;
     using Kuiper.Platform.Runtime.Execution.Attributes;
     using Kuiper.Platform.Serialization.Serialization;
     using Kuiper.ResourceServer.Service.Core;

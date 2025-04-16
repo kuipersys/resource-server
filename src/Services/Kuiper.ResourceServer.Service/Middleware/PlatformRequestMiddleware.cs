@@ -9,6 +9,7 @@ namespace Kuiper.ResourceServer.Service.Middleware
     using Kuiper.Platform.Framework;
     using Kuiper.Platform.Framework.Errors;
     using Kuiper.Platform.Framework.Messages;
+    using Kuiper.Platform.ManagementObjects;
     using Kuiper.Platform.Runtime;
     using Kuiper.Platform.Serialization.Serialization;
     using Kuiper.ResourceServer.Service.Core;

@@ -7,6 +7,7 @@
 namespace Kuiper.ResourceServer.Service.Core
 {
     using Kuiper.Platform.Framework;
+    using Kuiper.Platform.ManagementObjects;
 
     public interface IResourceRequestValidator
     {

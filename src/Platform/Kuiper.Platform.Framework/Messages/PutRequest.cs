@@ -7,6 +7,7 @@ namespace Kuiper.Platform.Framework.Messages
     using System.Text.Json.Serialization;
 
     using Kuiper.Platform.Framework;
+    using Kuiper.Platform.ManagementObjects;
 
     public sealed class PutRequest : PlatformRequest
     {

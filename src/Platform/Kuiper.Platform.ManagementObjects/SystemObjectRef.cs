@@ -4,12 +4,14 @@
 // For licensing inquiries, contact licensing@kuipersys.com
 // </copyright>
 
-namespace Kuiper.Platform.Framework
+namespace Kuiper.Platform.ManagementObjects
 {
+    using System;
     using System.Text.Json.Serialization;
 
+    [Obsolete("This class is deprecated. Use SystemObjectRef instead.", true)]
     [JsonDerivedType(typeof(SystemObjectRef), nameof(SystemObjectRef))]
-    public class SystemObjectRef
+    internal class SystemObjectRef
     {
         [JsonPropertyOrder(10)]
         public string? ApiVersion { get; set; }

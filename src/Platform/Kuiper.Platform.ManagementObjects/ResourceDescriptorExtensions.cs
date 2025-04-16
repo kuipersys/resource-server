@@ -4,9 +4,11 @@
 // For licensing inquiries, contact licensing@kuipersys.com
 // </copyright>
 
+using System.Linq;
+
 using Kuiper.Platform.Framework.Abstractions;
 
-namespace Kuiper.Platform.Framework
+namespace Kuiper.Platform.ManagementObjects
 {
     public static class ResourceDescriptorExtensions
     {

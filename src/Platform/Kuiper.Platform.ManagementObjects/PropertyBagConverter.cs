@@ -4,12 +4,13 @@
 // For licensing inquiries, contact licensing@kuipersys.com
 // </copyright>
 
-namespace Kuiper.Platform.Framework
+namespace Kuiper.Platform.ManagementObjects
 {
+    using System;
     using System.Text.Json;
     using System.Text.Json.Serialization;
 
-    internal class PropertyBagConverter : JsonConverter<PropertyBag>
+    public class PropertyBagConverter : JsonConverter<PropertyBag>
     {
         public override PropertyBag? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {

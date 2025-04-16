@@ -12,8 +12,8 @@ namespace Kuiper.Platform.ManagementObjects.v1alpha1
     using System.ComponentModel.DataAnnotations;
     using System.Text.Json.Serialization;
 
-    using Kuiper.Platform.Framework;
     using Kuiper.Platform.Framework.Abstractions.Objects;
+    using Kuiper.Platform.ManagementObjects;
 
     public sealed class ResourceDefinition : SystemObject, IResourceDefinition
     {

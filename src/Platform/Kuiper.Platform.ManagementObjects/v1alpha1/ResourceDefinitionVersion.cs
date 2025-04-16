@@ -9,8 +9,8 @@ namespace Kuiper.Platform.ManagementObjects.v1alpha1
     using System.ComponentModel.DataAnnotations;
     using System.Text.Json.Serialization;
 
-    using Kuiper.Platform.Framework;
     using Kuiper.Platform.Framework.Abstractions.Objects;
+    using Kuiper.Platform.ManagementObjects;
 
     /// <summary>
     /// Represents a version of a resource definition. Used to define the schema and other properties of a resource.

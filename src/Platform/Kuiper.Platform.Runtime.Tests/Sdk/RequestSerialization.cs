@@ -8,6 +8,7 @@ namespace Kuiper.Platform.Runtime.Tests.Sdk
 {
     using Kuiper.Platform.Framework;
     using Kuiper.Platform.Framework.Messages;
+    using Kuiper.Platform.ManagementObjects;
     using Kuiper.Platform.Serialization.Serialization;
 
     using Shouldly;
