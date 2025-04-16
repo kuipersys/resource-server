@@ -39,16 +39,16 @@ namespace Kuiper.ResourceServer.Service.Core
             }
 
             var group = segments[0];
-            var apiVersion = segments[1];
-            var @namespace = segments[2];
-            var resourceType = segments[3];
-            var resourceName = segments.Length > 4 ? segments[4] : null;
-            var subResourcePath = segments.Length > 5 ? string.Join('/', segments, 5, segments.Length - 5) : null;
+            var @namespace = segments[1];
+            var resourceType = segments[2];
+            var resourceName = segments.Length > 3 ? segments[3] : null;
+            var subResourcePath = segments.Length > 4 ? string.Join('/', segments, 4, segments.Length - 4) : null;
 
             return new ResourceDescriptor()
             {
                 Group = group,
-                GroupVersion = apiVersion,
+                // API VERSION IS NOT INCLUDED IN THE URI FOR RESOURCES:
+                // GroupVersion = apiVersion,
                 Namespace = @namespace,
                 Kind = resourceType,
                 Name = resourceName,

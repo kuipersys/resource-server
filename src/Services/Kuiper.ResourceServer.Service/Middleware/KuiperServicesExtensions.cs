@@ -4,8 +4,11 @@
 // For licensing inquiries, contact licensing@kuipersys.com
 // </copyright>
 
+using Kuiper.Platform.Framework.Abstractions;
+using Kuiper.Platform.ManagementObjects.v1alpha1;
 using Kuiper.ResourceServer.Service;
 using Kuiper.ResourceServer.Service.Core;
+using Kuiper.ServiceInfra.Abstractions.Persistence;
 using Kuiper.ServiceInfra.Persistence;
 
 namespace Kuiper.ResourceServer.Service.Middleware;
@@ -15,7 +18,41 @@ public static class KuiperServicesExtensions
     public static IServiceCollection AddKuiperServices(this IServiceCollection services, KuiperEndpointConfiguration? endpointConfiguration = null)
     {
         services
-            .AddSingleton<IResourceManager, ResourceManager>()
+            .AddSingleton(services =>
+            {
+                var store = services.GetRequiredService<IKeyValueStore>();
+                var builder = new ResourceDefinitionManagerBuilder(store, new CoreResourceModule());
+
+                var modules = services.GetServices<IPlatformModule>();
+                if (modules != null && modules.Count() > 0)
+                {
+                    foreach (var module in modules)
+                    {
+                        builder.RegisterModule(module);
+                    }
+                }
+
+                return builder;
+            })
+            .AddSingleton<IResourceManager>(services =>
+            {
+                var builder = services.GetRequiredService<ResourceDefinitionManagerBuilder>();
+                ResourceManager resourceManager = new ResourceManager(services.GetRequiredService<IKeyValueStore>());
+                Task initTask = resourceManager.InitializeAsync(builder);
+                initTask.Wait(CancellationToken.None);
+
+                if (initTask.IsFaulted)
+                {
+                    throw initTask.Exception ?? new Exception("Failed to initialize resource manager");
+                }
+
+                if (initTask.IsCanceled)
+                {
+                    throw new Exception("Failed to initialize resource manager");
+                }
+
+                return resourceManager;
+            })
             .AddSingleton<IResourceRequestValidator, ResourceRequestValidator>()
             .AddScoped<PlatformRequestMiddleware>()
             .AddPluginRuntime()

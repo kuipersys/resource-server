@@ -6,38 +6,45 @@
 
 namespace Kuiper.Platform.ManagementObjects.v1alpha1
 {
-    using System;
     using System.ComponentModel.DataAnnotations;
     using System.Text.Json.Serialization;
 
     using Kuiper.Platform.Framework;
+    using Kuiper.Platform.Framework.Abstractions.Objects;
 
-    public sealed class ResourceDefinitionVersion
+    /// <summary>
+    /// Represents a version of a resource definition. Used to define the schema and other properties of a resource.
+    /// </summary>
+    public sealed class ResourceDefinitionVersion : IResourceDefinitionVersion
     {
+        /// <summary>
+        /// Gets or sets the name of the resource definition version.
+        /// </summary>
         [Required]
         [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonPropertyName("served")]
-        public bool Served { get; set; } = true;
+        /// <summary>
+        /// Gets or sets a value indicating whether or not the resource definition version is enabled.
+        /// </summary>
+        [JsonPropertyName("enabled")]
+        public bool Enabled { get; set; } = true;
 
-        [JsonPropertyName("storage")]
-        public bool Storage { get; set; } = true;
-
+        /// <summary>
+        /// Gets or sets the schema for the resource definition version.
+        /// </summary>
         [JsonPropertyName("schema")]
         public ResourceDefinitionVersionSchema Schema { get; set; }
 
-        [JsonPropertyName("resourceHandlerType")]
-        public string ResourceOperatorType { get; set; }
+        /// <summary>
+        /// Gets or sets an optional field that allows a remote service to be specified for handling.
+        /// </summary>
+        [JsonPropertyName("operationEndpoint")]
+        public string? OperationEndpoint { get; set; }
 
         [JsonPropertyOrder(int.MaxValue)]
         [JsonExtensionData]
         public PropertyBag ExtensionData { get; set; } = new PropertyBag();
-
-        public void SetResourceHandlerType(Type type)
-        {
-            this.ResourceOperatorType = type.FullName;
-        }
 
         public NJsonSchema.JsonSchema GetJsonSchema()
         {

@@ -9,13 +9,13 @@ namespace Kuiper.Platform.Framework
     using Newtonsoft.Json;
 
     [JsonConverter(typeof(PropertyBagConverter))]
-    public class PropertyBag : Dictionary<string, object>, IDictionary<string, object>
+    public class PropertyBag : Dictionary<string, object?>, IDictionary<string, object?>
     {
-        public T Get<T>(string key)
+        public T? Get<T>(string key)
         {
             if (this.TryGetValue(key, out var value))
             {
-                return (T)value;
+                return (T?)value;
             }
 
             return default;

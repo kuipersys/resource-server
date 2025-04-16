@@ -6,11 +6,11 @@
 
 namespace Kuiper.Platform.Runtime.Scheduling
 {
-    public delegate void BasicEventHandler(object source, EventArgs e);
-
     public interface IEventTimer : IDisposable
     {
-        event BasicEventHandler OnCancel;
+        public delegate void OnDisposedEventHandler(object source, EventArgs e);
+
+        event OnDisposedEventHandler OnDisposed;
 
         Guid Id { get; }
 

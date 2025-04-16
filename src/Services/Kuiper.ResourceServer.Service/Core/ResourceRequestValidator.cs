@@ -47,16 +47,6 @@ namespace Kuiper.ResourceServer.Service.Core
                     PlatformErrorCodes.InvalidResourceKind,
                     new ArgumentNullException($"{nameof(ResourceDescriptor)}.{nameof(ResourceDescriptor.Kind)}"));
             }
-
-            var resourceVersionExists = await this.resourceManager
-                .ResourceVersionExists(resourceDescriptor.Group, resourceDescriptor.Kind, resourceDescriptor.GroupVersion);
-
-            if (!resourceVersionExists)
-            {
-                throw new PlatformException(
-                    $"Invalid Resource Kind: {resourceDescriptor.ApiVersion}/{resourceDescriptor.Kind}",
-                    PlatformErrorCodes.InvalidResourceKind);
-            }
         }
 
         public async Task ValidateAsync(SystemObject resource)
@@ -68,14 +58,6 @@ namespace Kuiper.ResourceServer.Service.Core
                     PlatformErrorCodes.InvalidResourceKind,
                     new ArgumentNullException($"{nameof(SystemObject)}.{nameof(SystemObject.Kind)}"));
             }
-
-            //if (string.IsNullOrWhiteSpace(resource.Metadata!.Name))
-            //{
-            //    throw new PlatformException(
-            //        "Invalid System Object Name",
-            //        PlatformErrorCodes.InvalidResourceKind,
-            //        new ArgumentNullException($"{nameof(SystemObject)}.{nameof(SystemObject.Metadata)}.{nameof(SystemObject.Metadata.Name)}"));
-            //}
 
             var descriptor = resource.AsResourceDescriptor();
 

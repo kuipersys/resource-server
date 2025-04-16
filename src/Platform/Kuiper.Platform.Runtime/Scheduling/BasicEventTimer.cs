@@ -4,15 +4,17 @@
 // For licensing inquiries, contact licensing@kuipersys.com
 // </copyright>
 
-using Kuiper.Platform.Extensions.Contracts;
-
 namespace Kuiper.Platform.Runtime.Scheduling
 {
+    using Kuiper.Platform.Extensions.Contracts;
+
+    using static Kuiper.Platform.Runtime.Scheduling.IEventTimer;
+
     internal class BasicEventTimer : IEventTimer
     {
         private readonly TimeSpan timeout;
         private readonly Func<Task> callback;
-        private readonly SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim semaphoreSlim = new SemaphoreSlim(0, 1);
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         private volatile Timer timer;
 
@@ -40,7 +42,7 @@ namespace Kuiper.Platform.Runtime.Scheduling
                 this.timeout);
         }
 
-        public event BasicEventHandler? OnCancel;
+        public event OnDisposedEventHandler? OnDisposed;
 
         public Guid Id { get; } = Guid.NewGuid();
 
@@ -59,14 +61,12 @@ namespace Kuiper.Platform.Runtime.Scheduling
                 }
 
                 this.timer.Change(Timeout.Infinite, Timeout.Infinite);
+
+                // We wait for ~4 times the timeout to ensure that any running task has time to finish.
                 this.semaphoreSlim.Wait(new TimeSpan(this.timeout.Ticks * 4));
             }
             catch
             {
-            }
-            finally
-            {
-                this.OnCancel?.Invoke(this, new EventArgs());
             }
         }
 
@@ -74,7 +74,8 @@ namespace Kuiper.Platform.Runtime.Scheduling
         {
             this.semaphoreSlim.Dispose();
             this.Cancel();
-            this.OnCancel = null;
+            this.OnDisposed?.Invoke(this, new EventArgs());
+            this.OnDisposed = null;
         }
 
         private async Task Run(CancellationToken cancellationToken)

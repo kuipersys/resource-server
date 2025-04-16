@@ -6,7 +6,10 @@
 
 namespace Kuiper.ResourceServer.Service.Core
 {
+    using System.Threading;
+
     using Kuiper.Platform.Framework;
+    using Kuiper.Platform.Framework.Abstractions;
     using Kuiper.Platform.ManagementObjects.v1alpha1;
     using Kuiper.Platform.Serialization.Serialization;
     using Kuiper.ServiceInfra.Abstractions.Persistence;
@@ -14,13 +17,6 @@ namespace Kuiper.ResourceServer.Service.Core
     internal sealed class ResourceManager : IResourceManager
     {
         private readonly IKeyValueStore store;
-        private readonly ResourceDescriptor resourceDescriptor = new ResourceDescriptor
-        {
-            Kind = nameof(ResourceDefinition),
-            Group = Constants.Resources.SYSTEM_EXTENSION_GROUP,
-            GroupVersion = Constants.Resources.SYSTEM_VERSION,
-            Namespace = Constants.Resources.GLOBAL_NAMESPACE,
-        };
 
         private readonly IDictionary<string, ResourceDefinition> resources
             = new Dictionary<string, ResourceDefinition>(StringComparer.OrdinalIgnoreCase);
@@ -66,47 +62,30 @@ namespace Kuiper.ResourceServer.Service.Core
             }
         }
 
-        private ResourceDefinition CreateResourceDefinitionResource()
+        internal static async Task PersistResourceDefinitionsAsync(IKeyValueStore store, ResourceDefinition resourceDefinition, bool overwrite = false, CancellationToken cancellationToken = default)
         {
-            ResourceDefinition resourceDefinition = new ResourceDefinition()
+            if (store == null)
             {
-                ApiVersion = $"{this.resourceDescriptor.ApiVersion}",
-                Kind = $"{this.resourceDescriptor.Kind}",
-                Metadata = new SystemObjectMetadata()
-                {
-                    Name = $"$self",
-                    Namespace = $"{this.resourceDescriptor.Namespace}",
-                    ResourceVersion = $"{this.resourceDescriptor.GroupVersion}",
-                    Uid = Guid.NewGuid().ToString()
-                },
-                Spec = new ResourceDefinitionSpec()
-                {
-                    Group = $"{this.resourceDescriptor.Group}",
-                    Scope = ResourceScope.System,
-                    Names = new ResourceDefinitionNames()
-                    {
-                        Kind = $"{this.resourceDescriptor.Kind}",
-                        Plural = $"{this.resourceDescriptor.Kind.ToLower()}s",
-                        Singular = $"{this.resourceDescriptor.Kind.ToLower()}",
-                        ShortNames = new string[] { $"resource" },
-                    },
-                    Versions = new ResourceDefinitionVersion[]
-                    {
-                        new ResourceDefinitionVersion()
-                        {
-                            Name = $"{this.resourceDescriptor.GroupVersion}",
-                            Served = true,
-                            Storage = true,
-                            Schema = new ResourceDefinitionVersionSchema()
-                            {
-                                OpenAPIV3Schema = SystemSchema.GetSchemaAsJsonElement<ResourceDefinition>()
-                            }
-                        }
-                    }
-                }
-            };
+                throw new ArgumentNullException(nameof(store));
+            }
 
-            return resourceDefinition;
+            if (resourceDefinition == null)
+            {
+                throw new ArgumentNullException(nameof(resourceDefinition));
+            }
+
+            try
+            {
+                _ = await store.GetAsync(resourceDefinition.AsResourceDescriptor().ToResourceId(), cancellationToken);
+            }
+            catch (KeyNotFoundException)
+            {
+                // Ignore the exception if the resource definition does not exist and create it
+                await store.PutAsync(
+                    resourceDefinition.AsResourceDescriptor().ToResourceId(),
+                    resourceDefinition.ObjectToJsonBytes(),
+                    cancellationToken);
+            }
         }
 
         private async Task LoadAsync(CancellationToken cancellationToken = default)
@@ -118,25 +97,14 @@ namespace Kuiper.ResourceServer.Service.Core
 
             this.isLoaded = true;
 
-            // Save the Resource Definition
-            var systemResourceDefinition = this.CreateResourceDefinitionResource();
-
-            try
+            var resourceDescriptor = new ResourceDescriptor
             {
-                _ = await this.store.GetAsync(systemResourceDefinition.AsResourceDescriptor().ToResourceId(), cancellationToken);
-            }
-            catch (KeyNotFoundException)
-            {
-                // Ignore the exception if the resource definition does not exist and create it
-                await this.store.PutAsync(
-                    systemResourceDefinition.AsResourceDescriptor().ToResourceId(),
-                    systemResourceDefinition.ObjectToJsonBytes(),
-                    cancellationToken);
-            }
+                Namespace = SystemConstants.Resources.GLOBAL_NAMESPACE,
+                Group = SystemConstants.Resources.SYSTEM_EXTENSION_GROUP,
+                Kind = nameof(ResourceDefinition),
+            };
 
-            // NOTE: We can do the same thing by using the standard api runtime
-
-            var objects = await this.store.ScanValuesAsync(this.resourceDescriptor.ToResourcePrefix(), cancellationToken);
+            var objects = await this.store.ScanValuesAsync(resourceDescriptor.ToResourcePrefix(), cancellationToken);
 
             foreach (var objectData in objects)
             {
@@ -149,7 +117,7 @@ namespace Kuiper.ResourceServer.Service.Core
                         throw new InvalidOperationException("Resource definition is null.");
                     }
 
-                    this.AddNamedResourceDefinition(resourceDefinition);
+                    this.AddResourceDefinition(resourceDefinition);
                 }
                 catch (Exception ex)
                 {
@@ -158,9 +126,8 @@ namespace Kuiper.ResourceServer.Service.Core
             }
         }
 
-        private void AddNamedResourceDefinition(ResourceDefinition definition)
+        private void AddResourceDefinition(ResourceDefinition definition)
         {
-
             var key = definition.GetKey();
 
             if (string.IsNullOrWhiteSpace(key))
@@ -175,7 +142,7 @@ namespace Kuiper.ResourceServer.Service.Core
 
             this.resources.Add(key, definition);
 
-            foreach (var version in definition.GetVersions())
+            foreach (var version in definition.GetVersions<ResourceDefinitionVersion>())
             {
                 if (this.resourceVersions.ContainsKey(version.Key))
                 {
@@ -184,6 +151,12 @@ namespace Kuiper.ResourceServer.Service.Core
 
                 this.resourceVersions.Add(version.Key, version.Value);
             }
+        }
+
+        internal async Task InitializeAsync(ResourceDefinitionManagerBuilder builder)
+        {
+            await builder.InitializeSystemResourceDefinitions(CancellationToken.None);
+            await this.LoadAsync(CancellationToken.None);
         }
     }
 }

@@ -4,6 +4,8 @@
 // For licensing inquiries, contact licensing@kuipersys.com
 // </copyright>
 
+using Kuiper.Platform.Framework.Abstractions;
+
 namespace Kuiper.Platform.Framework
 {
     public static class ResourceDescriptorExtensions
@@ -13,14 +15,14 @@ namespace Kuiper.Platform.Framework
             systemObject.NormalizeResource();
 
             var apiVersionParts = systemObject.ApiVersion.Split('/');
-            var group = apiVersionParts.Length > 1 ? apiVersionParts.First() : Constants.Resources.SYSTEM_GROUP;
+            var group = apiVersionParts.Length > 1 ? apiVersionParts.First() : SystemConstants.Resources.SYSTEM_GROUP;
             var version = apiVersionParts.Last();
 
             return new ResourceDescriptor()
             {
                 Group = group,
                 GroupVersion = version,
-                Namespace = systemObject.Metadata.Namespace ?? Constants.Resources.DEFAULT_NAMESPACE,
+                Namespace = systemObject.Metadata.Namespace ?? SystemConstants.Resources.DEFAULT_NAMESPACE,
                 Kind = systemObject.Kind,
                 Name = systemObject.Metadata.Name,
             };
@@ -30,10 +32,8 @@ namespace Kuiper.Platform.Framework
             => systemObject
                 .NormalizeResourceApiVersion()
                 .NormalizeResourceNamespace()
-                .NormalizeResourceKind()
                 .NormalizeResourceName()
                 .NormalizeResourceVersion()
-                .NormalizeResourceUid()
                 .NormalizeResourceSelfLink();
 
         public static SystemObject NormalizeResourceSelfLink(this SystemObject systemObject)
@@ -44,18 +44,6 @@ namespace Kuiper.Platform.Framework
             }
 
             systemObject.Metadata.SelfLink = systemObject.Metadata.SelfLink.ToLower();
-
-            return systemObject;
-        }
-
-        public static SystemObject NormalizeResourceUid(this SystemObject systemObject)
-        {
-            if (string.IsNullOrWhiteSpace(systemObject.Metadata.Uid))
-            {
-                return systemObject;
-            }
-
-            systemObject.Metadata.Uid = systemObject.Metadata.Uid.ToLower();
 
             return systemObject;
         }
@@ -84,22 +72,11 @@ namespace Kuiper.Platform.Framework
             return systemObject;
         }
 
-        public static SystemObject NormalizeResourceKind(this SystemObject systemObject)
-        {
-            // We don't need to normalize the kind here since we override it during the create
-            // proces with what's defined in the resource definition.
-
-            // Also - we lower case in the resource definition resource manager so that
-            // lookups are case insensitive.
-
-            return systemObject;
-        }
-
         public static SystemObject NormalizeResourceNamespace(this SystemObject systemObject)
         {
             if (string.IsNullOrWhiteSpace(systemObject.Metadata.Namespace))
             {
-                systemObject.Metadata.Namespace = Constants.Resources.DEFAULT_NAMESPACE;
+                systemObject.Metadata.Namespace = SystemConstants.Resources.DEFAULT_NAMESPACE;
             }
             else
             {
@@ -118,7 +95,7 @@ namespace Kuiper.Platform.Framework
             }
 
             var apiVersionParts = systemObject.ApiVersion.Split('/');
-            var group = apiVersionParts.Length > 1 ? apiVersionParts.First() : Constants.Resources.SYSTEM_GROUP;
+            var group = apiVersionParts.Length > 1 ? apiVersionParts.First() : SystemConstants.Resources.SYSTEM_GROUP;
             var version = apiVersionParts.Last();
 
             systemObject.ApiVersion = $"{group}/{version}".ToLower();

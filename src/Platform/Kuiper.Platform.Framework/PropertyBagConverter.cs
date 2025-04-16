@@ -44,31 +44,13 @@ namespace Kuiper.Platform.Framework
 
                 if (value is JsonElement element)
                 {
-                    value = this.DeserializeKnownType(propertyName, element, options);
+                    value = this.DeserializeKnownType(propertyName!, element, options);
                 }
 
-                result.Add(propertyName, value);
+                result.Add(propertyName!, value);
             }
 
             throw new JsonException();
-        }
-
-        private object DeserializeKnownType(string propertyName, JsonElement jsonElement, JsonSerializerOptions options)
-        {
-            if (jsonElement.ValueKind != JsonValueKind.Object)
-            {
-                return jsonElement;
-            }
-
-            var typeName = jsonElement.GetProperty("$type").GetString();
-            var knownType = KnownTypeCache.ResolveType(typeName);
-
-            if (knownType == null)
-            {
-                throw new JsonException($"Unknown type: {typeName ?? "<null>"}");
-            }
-
-            return jsonElement.Deserialize(knownType, options);
         }
 
         public override void Write(Utf8JsonWriter writer, PropertyBag value, JsonSerializerOptions options)
@@ -90,6 +72,24 @@ namespace Kuiper.Platform.Framework
             }
 
             writer.WriteEndObject();
+        }
+
+        private object DeserializeKnownType(string propertyName, JsonElement jsonElement, JsonSerializerOptions options)
+        {
+            if (jsonElement.ValueKind != JsonValueKind.Object)
+            {
+                return jsonElement;
+            }
+
+            var typeName = jsonElement.GetProperty("$type").GetString();
+            var knownType = KnownTypeCache.ResolveType(typeName!);
+
+            if (knownType == null)
+            {
+                throw new JsonException($"Unknown type: {typeName ?? "<null>"}");
+            }
+
+            return jsonElement.Deserialize(knownType, options)!;
         }
     }
 }

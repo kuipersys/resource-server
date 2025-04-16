@@ -11,6 +11,7 @@ namespace Kuiper.ResourceServer.Service.Core
     public interface IResourceRequestValidator
     {
         Task ValidateAsync(ResourceDescriptor? resourceDescriptor, bool throwOnNull = true);
+
         Task ValidateAsync(SystemObject systemObject);
     }
 }

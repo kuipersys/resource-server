@@ -8,8 +8,6 @@ namespace Kuiper.Platform.Runtime.Scheduling
 {
     public static class CommonTiming
     {
-        private static volatile Random Random = new Random();
-
         public const int MaxTimeoutMs = 350;
 
         public const int MinTimeoutMs = 100;
@@ -22,8 +20,10 @@ namespace Kuiper.Platform.Runtime.Scheduling
 
         public const long MaxTimeoutTicks = MaxTimeoutMs * TimeSpan.TicksPerMillisecond;
 
+        private static readonly Random Random = new Random();
+
         /// <summary>
-        /// The timeout to wait before an election is started for this <see cref="Server"/>.
+        /// Gets the timeout to wait before an election is started for this <see cref="Server"/>.
         /// </summary>
         public static TimeSpan HeartbeatTimeout
         {
@@ -33,7 +33,7 @@ namespace Kuiper.Platform.Runtime.Scheduling
             }
         }
 
-        public static TimeSpan ElectionTimeout
+        public static TimeSpan LeaderElectionTimeout
         {
             get
             {

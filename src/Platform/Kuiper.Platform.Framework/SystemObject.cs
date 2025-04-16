@@ -9,11 +9,13 @@ namespace Kuiper.Platform.Framework
     using System.ComponentModel.DataAnnotations;
     using System.Text.Json.Serialization;
 
+    using Kuiper.Platform.Framework.Abstractions.Objects;
+
     using NJsonSchema.Annotations;
 
     [JsonSchemaIgnore]
     [JsonDerivedType(typeof(SystemObject), nameof(SystemObject))]
-    public class SystemObject
+    public class SystemObject : ISystemObject
     {
         [Required]
         [JsonPropertyOrder(0)]
@@ -34,19 +36,5 @@ namespace Kuiper.Platform.Framework
         [JsonPropertyOrder(int.MaxValue)]
         [JsonExtensionData]
         public PropertyBag ExtensionData { get; set; } = new PropertyBag();
-
-        //public SystemObjectRef AsRef()
-        //{
-        //    return new SystemObjectRef
-        //    {
-        //        ApiVersion = this.ApiVersion,
-        //        Kind = this.Kind,
-        //        Link = this.Metadata?.SelfLink,
-        //        Name = this.Metadata?.Name,
-        //        Namespace = this.Metadata?.Namespace,
-        //        Uid = this.Metadata?.Uid,
-        //        Version = this.Metadata?.ResourceVersion
-        //    };
-        //}
     }
 }

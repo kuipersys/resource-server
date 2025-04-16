@@ -8,6 +8,8 @@ namespace Kuiper.Platform.Framework
 {
     using System.Text.Json.Serialization;
 
+    using Kuiper.Platform.Framework.Abstractions;
+
     [JsonDerivedType(typeof(ResourceDescriptor), nameof(ResourceDescriptor))]
     public class ResourceDescriptor
     {
@@ -20,14 +22,14 @@ namespace Kuiper.Platform.Framework
         {
             get
             {
-                return this.@namespace ?? Constants.Resources.DEFAULT_NAMESPACE;
+                return this.@namespace ?? SystemConstants.Resources.DEFAULT_NAMESPACE;
             }
 
             set
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
-                    this.@namespace = Constants.Resources.DEFAULT_NAMESPACE;
+                    this.@namespace = SystemConstants.Resources.DEFAULT_NAMESPACE;
                 }
                 else
                 {
@@ -37,38 +39,10 @@ namespace Kuiper.Platform.Framework
         }
 
         [JsonPropertyOrder(15)]
-        public string Group
-        {
-            get => this.group ?? Constants.Resources.SYSTEM_GROUP;
-            set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    this.group = Constants.Resources.SYSTEM_GROUP;
-                }
-                else
-                {
-                    this.group = value;
-                }
-            }
-        }
+        public string Group { get; set; } = string.Empty;
 
         [JsonPropertyOrder(16)]
-        public string GroupVersion
-        {
-            get => this.groupVersion ?? Constants.Resources.SYSTEM_VERSION;
-            set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    this.groupVersion = Constants.Resources.SYSTEM_VERSION;
-                }
-                else
-                {
-                    this.groupVersion = value;
-                }
-            }
-        }
+        public string GroupVersion { get; set; } = string.Empty;
 
         [JsonPropertyOrder(20)]
         public string? Kind { get; set; }
@@ -98,7 +72,7 @@ namespace Kuiper.Platform.Framework
             }
 
             parts.Add(this.Namespace);
-            parts.Add(this.ApiVersion);
+            parts.Add(this.Group);
 
             parts.Add(this.Kind);
 

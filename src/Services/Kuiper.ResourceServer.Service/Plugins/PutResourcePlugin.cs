@@ -7,6 +7,7 @@
 namespace Kuiper.ResourceServer.Service.Plugins
 {
     using Kuiper.Platform.Framework;
+    using Kuiper.Platform.Framework.Abstractions;
     using Kuiper.Platform.Framework.Errors;
     using Kuiper.Platform.Framework.Extensibility;
     using Kuiper.Platform.Runtime.Execution.Attributes;
@@ -52,7 +53,7 @@ namespace Kuiper.ResourceServer.Service.Plugins
                 // Change the resource namespace and regenerate the resourceId if the scope is system
                 if (definition.Spec.Scope == Platform.ManagementObjects.v1alpha1.ResourceScope.System)
                 {
-                    systemObject.Metadata.Namespace = Constants.Resources.GLOBAL_NAMESPACE;
+                    systemObject.Metadata.Namespace = SystemConstants.Resources.GLOBAL_NAMESPACE;
                     descriptor = systemObject.AsResourceDescriptor();
                     resourceId = descriptor.ToResourceId();
                 }

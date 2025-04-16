@@ -6,6 +6,7 @@
 
 namespace Kuiper.ResourceServer.Service.Core
 {
+    using Kuiper.Platform.Framework.Abstractions.Objects;
     using Kuiper.Platform.ManagementObjects.v1alpha1;
 
     public interface IResourceManager

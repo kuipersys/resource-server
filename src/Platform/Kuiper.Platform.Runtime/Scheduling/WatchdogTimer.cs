@@ -1,10 +1,14 @@
 ﻿// <copyright file="WatchdogTimer.cs" company="Kuiper Microsystems, LLC">
-// Copyright (c) Kuiper Microsystems, LLC. All rights reserved.
+// © Kuiper Microsystems, LLC. All rights reserved.
+// Unauthorized copying or use of this file, via any medium, is strictly prohibited.
+// For licensing inquiries, contact licensing@kuipersys.com
 // </copyright>
 
 namespace Kuiper.Platform.Runtime.Scheduling
 {
     using Kuiper.Platform.Extensions.Contracts;
+
+    using static Kuiper.Platform.Runtime.Scheduling.IEventTimer;
 
     public class WatchdogTimer : IEventTimer
     {
@@ -23,7 +27,7 @@ namespace Kuiper.Platform.Runtime.Scheduling
             this.timer.Enabled = true;
         }
 
-        public event BasicEventHandler? OnCancel;
+        public event OnDisposedEventHandler? OnDisposed;
 
         public Guid Id { get; } = Guid.NewGuid();
 
@@ -41,7 +45,7 @@ namespace Kuiper.Platform.Runtime.Scheduling
             }
             finally
             {
-                this.OnCancel?.Invoke(this, new EventArgs());
+                this.OnDisposed?.Invoke(this, new EventArgs());
             }
         }
 

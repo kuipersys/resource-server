@@ -4,9 +4,9 @@
 // For licensing inquiries, contact licensing@kuipersys.com
 // </copyright>
 
-namespace Kuiper.Platform.Framework
+namespace Kuiper.Platform.Framework.Abstractions
 {
-    public static class Constants
+    public static class SystemConstants
     {
         public static class Resources
         {
@@ -14,7 +14,6 @@ namespace Kuiper.Platform.Framework
             public const string GLOBAL_NAMESPACE = "global";
             public const string SYSTEM_NAMESPACE = "system";
             public const string SYSTEM_GROUP = "api.cloud-api.dev";
-            public const string SYSTEM_VERSION = "v1alpha1";
             public const string SYSTEM_EXTENSION_GROUP = $"ext.{SYSTEM_GROUP}";
         }
     }

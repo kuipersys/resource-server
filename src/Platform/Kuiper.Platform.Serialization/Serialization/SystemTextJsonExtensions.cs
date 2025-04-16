@@ -20,32 +20,6 @@ namespace Kuiper.Platform.Serialization.Serialization
         private static readonly JsonSerializerOptions StandardWriteOptions = CreateJsonSerializerOptions(false, true);
         private static readonly JsonSerializerOptions StandardReadOptions = CreateJsonSerializerOptions(false, false);
 
-        private static JsonSerializerOptions CreateJsonSerializerOptions(bool writeIndented, bool forSerialization)
-        {
-            var options = new JsonSerializerOptions()
-            {
-                WriteIndented = writeIndented,
-                PropertyNameCaseInsensitive = true,
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                IgnoreReadOnlyProperties = true,
-                IgnoreReadOnlyFields = true,
-                IncludeFields = true,
-                MaxDepth = 25,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                AllowTrailingCommas = true,
-                ReadCommentHandling = JsonCommentHandling.Skip,
-                NumberHandling = JsonNumberHandling.AllowReadingFromString,
-                Converters =
-                {
-                    new JsonStringEnumConverter(),
-                    new JsonBoolConverter(),
-                    new SystemTypeConverter(),
-                },
-            };
-
-            return options;
-        }
-
         public static string ObjectToJson<T>(this T obj, bool writeIndented = false)
             => JsonSerializer.Serialize(obj, obj.GetType(), GetJsonSerializerWriterOptions(writeIndented));
 
@@ -110,5 +84,31 @@ namespace Kuiper.Platform.Serialization.Serialization
 
         private static JsonSerializerOptions GetJsonSerializerWriterOptions(bool writeIndented = false)
             => writeIndented ? IndentedWriteOptions : StandardWriteOptions;
+
+        private static JsonSerializerOptions CreateJsonSerializerOptions(bool writeIndented, bool forSerialization)
+        {
+            var options = new JsonSerializerOptions()
+            {
+                WriteIndented = writeIndented,
+                PropertyNameCaseInsensitive = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                IgnoreReadOnlyProperties = true,
+                IgnoreReadOnlyFields = true,
+                IncludeFields = true,
+                MaxDepth = 25,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                AllowTrailingCommas = true,
+                ReadCommentHandling = JsonCommentHandling.Skip,
+                NumberHandling = JsonNumberHandling.AllowReadingFromString,
+                Converters =
+                {
+                    new JsonStringEnumConverter(),
+                    new JsonBoolConverter(),
+                    new SystemTypeConverter(),
+                },
+            };
+
+            return options;
+        }
     }
 }

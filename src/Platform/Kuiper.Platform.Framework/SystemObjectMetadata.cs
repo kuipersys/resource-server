@@ -25,7 +25,9 @@ namespace Kuiper.Platform.Framework
         [JsonPropertyName("namespace")]
         public string? Namespace { get; set; }
 
-        [Obsolete("Use 'Name' instead.")]
+        /// <summary>
+        /// Gets or sets the an internal unique identifier for the object.
+        /// </summary>
         [JsonPropertyOrder(2)]
         [JsonPropertyName("uid")]
         public string? Uid { get; set; }
