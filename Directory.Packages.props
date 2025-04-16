@@ -45,6 +45,13 @@
   </ItemGroup>
   <ItemGroup>
     <!-- To reference a package in all projects, add it to this list. -->
-    <GlobalPackageReference Include="Microsoft.Build.Artifacts" Version="6.1.10" />
+    <GlobalPackageReference Include="Microsoft.Build.Artifacts" Version="6.1.10">
+        <PrivateAssets>all</PrivateAssets>
+        <Version>3.7.115</Version>
+    </GlobalPackageReference>
+    <GlobalPackageReference Include="Nerdbank.GitVersioning">
+        <PrivateAssets>all</PrivateAssets>
+        <Version>3.7.115</Version>
+    </GlobalPackageReference>
   </ItemGroup>
 </Project>
