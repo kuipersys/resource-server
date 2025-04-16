@@ -1,10 +1,10 @@
-﻿// <copyright file="OmitEmptyCollectionConverter.cs" company="Kuiper Microsystems, LLC">
+﻿// <copyright file="OmitEmptyCollectionConverterFactory.cs" company="Kuiper Microsystems, LLC">
 // © Kuiper Microsystems, LLC. All rights reserved.
 // Unauthorized copying or use of this file, via any medium, is strictly prohibited.
 // For licensing inquiries, contact licensing@kuipersys.com
 // </copyright>
 
-namespace Kuiper.Platform.Serialization.Serialization
+namespace Kuiper.Platform.Serialization.Serialization.Json
 {
     using System;
     using System.Collections;
@@ -36,20 +36,19 @@ namespace Kuiper.Platform.Serialization.Serialization
             type.IsGenericType && (
                 type.GetGenericTypeDefinition() == typeof(Dictionary<,>) ||
                 type.GetGenericTypeDefinition() == typeof(IDictionary<,>));
-    }
 
-    public class OmitEmptyCollectionConverter<T> : JsonConverter<IEnumerable<T>>
-    {
-        public override IEnumerable<T> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-            => JsonSerializer.Deserialize<List<T>>(ref reader, options);
-
-        public override void Write(Utf8JsonWriter writer, IEnumerable<T> value, JsonSerializerOptions options)
+        private class OmitEmptyCollectionConverter<T> : JsonConverter<IEnumerable<T>>
         {
-            if (value != null && value.Any())
+            public override IEnumerable<T> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+                => JsonSerializer.Deserialize<List<T>>(ref reader, options);
+
+            public override void Write(Utf8JsonWriter writer, IEnumerable<T> value, JsonSerializerOptions options)
             {
-                JsonSerializer.Serialize(writer, value, options);
+                if (value != null && value.Any())
+                {
+                    JsonSerializer.Serialize(writer, value, options);
+                }
             }
         }
     }
-
 }

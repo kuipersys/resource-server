@@ -9,7 +9,7 @@ namespace Kuiper.Platform.Framework
     using System.Text.Json.Serialization;
 
     using Kuiper.Platform.Framework.Messages;
-    using Kuiper.Platform.ManagementObjects;
+    using Kuiper.Platform.Serialization;
 
     [JsonDerivedType(typeof(PutResponse), nameof(PutResponse))]
     [JsonDerivedType(typeof(GetResponse), nameof(GetResponse))]

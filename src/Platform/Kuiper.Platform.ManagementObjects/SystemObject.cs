@@ -10,6 +10,7 @@ namespace Kuiper.Platform.ManagementObjects
     using System.Text.Json.Serialization;
 
     using Kuiper.Platform.Framework.Abstractions.Objects;
+    using Kuiper.Platform.Serialization;
 
     using NJsonSchema.Annotations;
 

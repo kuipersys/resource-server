@@ -6,8 +6,8 @@
       "$type": "SystemObject",
       "apiVersion": "v1",
       "metadata": {
-        "labels": {},
-        "annotations": {}
+        "name": "test",
+        "namespace": "default"
       }
     }
   }

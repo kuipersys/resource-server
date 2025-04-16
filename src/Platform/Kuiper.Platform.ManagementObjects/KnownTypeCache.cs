@@ -7,12 +7,14 @@
 namespace Kuiper.Platform.ManagementObjects
 {
     using System;
-    using System.Collections.Concurrent;
     using System.Collections.Generic;
+
+    using Kuiper.Platform.Serialization;
+    using Kuiper.Platform.Serialization.Serialization;
 
     internal static class KnownTypeCache
     {
-        private static readonly IDictionary<string, Type> typeCache = new ConcurrentDictionary<string, Type>();
+        private static readonly IDictionary<string, Type> TypeCache = new Dictionary<string, Type>();
 
         static KnownTypeCache()
         {
@@ -20,22 +22,22 @@ namespace Kuiper.Platform.ManagementObjects
             AddKnownType(typeof(SystemObject));
             AddKnownType(typeof(ResourceDescriptor));
             AddKnownType(typeof(SystemObjectMetadata));
-        }
-
-        private static void AddKnownType(Type type)
-        {
-            typeCache.Add(type.Name, type);
+            SerializationSettings.AddConverter(new PropertyBagConverter());
         }
 
         public static Type? ResolveType(string name)
         {
-            if (typeCache.TryGetValue(name, out var type))
+            if (TypeCache.TryGetValue(name, out var type))
             {
-                // RuntimeHelpers.RunClassConstructor(type.TypeHandle);
                 return type;
             }
 
             return null;
+        }
+
+        private static void AddKnownType(Type type)
+        {
+            TypeCache.Add(type.Name, type);
         }
     }
 }

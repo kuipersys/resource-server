@@ -1,10 +1,10 @@
-﻿// <copyright file="OmitEmptyDictionaryConverter.cs" company="Kuiper Microsystems, LLC">
+﻿// <copyright file="OmitEmptyDictionaryConverterFactory.cs" company="Kuiper Microsystems, LLC">
 // © Kuiper Microsystems, LLC. All rights reserved.
 // Unauthorized copying or use of this file, via any medium, is strictly prohibited.
 // For licensing inquiries, contact licensing@kuipersys.com
 // </copyright>
 
-namespace Kuiper.Platform.Serialization.Serialization
+namespace Kuiper.Platform.Serialization.Serialization.Json
 {
     using System;
     using System.Collections.Generic;
@@ -27,18 +27,18 @@ namespace Kuiper.Platform.Serialization.Serialization
             var converterType = typeof(OmitEmptyDictionaryConverter<,>).MakeGenericType(keyType, valueType);
             return (JsonConverter)Activator.CreateInstance(converterType)!;
         }
-    }
 
-    public class OmitEmptyDictionaryConverter<TKey, TValue> : JsonConverter<Dictionary<TKey, TValue>> where TKey : notnull
-    {
-        public override Dictionary<TKey, TValue> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-            => JsonSerializer.Deserialize<Dictionary<TKey, TValue>>(ref reader, options);
-
-        public override void Write(Utf8JsonWriter writer, Dictionary<TKey, TValue> value, JsonSerializerOptions options)
+        private class OmitEmptyDictionaryConverter<TKey, TValue> : JsonConverter<Dictionary<TKey, TValue>> where TKey : notnull
         {
-            if (value != null && value.Count > 0)
+            public override Dictionary<TKey, TValue> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+                => JsonSerializer.Deserialize<Dictionary<TKey, TValue>>(ref reader, options);
+
+            public override void Write(Utf8JsonWriter writer, Dictionary<TKey, TValue> value, JsonSerializerOptions options)
             {
-                JsonSerializer.Serialize(writer, value, options);
+                if (value != null && value.Count > 0)
+                {
+                    JsonSerializer.Serialize(writer, value, options);
+                }
             }
         }
     }

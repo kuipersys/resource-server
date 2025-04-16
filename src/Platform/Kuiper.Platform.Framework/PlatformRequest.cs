@@ -10,7 +10,7 @@ namespace Kuiper.Platform.Framework
     using System.Text.Json.Serialization;
 
     using Kuiper.Platform.Framework.Messages;
-    using Kuiper.Platform.ManagementObjects;
+    using Kuiper.Platform.Serialization;
 
     [JsonDerivedType(typeof(PutRequest), nameof(PutRequest))]
     [JsonDerivedType(typeof(GetRequest), nameof(GetRequest))]
@@ -46,7 +46,6 @@ namespace Kuiper.Platform.Framework
         public string? TraceId { get; set; }
 
         [JsonPropertyOrder(4)]
-        [JsonConverter(typeof(PropertyBagConverter))]
         public PropertyBag InputParameters { get; set; } = new PropertyBag();
 
         public T GetTarget<T>()

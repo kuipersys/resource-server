@@ -5,8 +5,7 @@
 // </copyright>
 
 using Kuiper.Platform.Framework.Abstractions;
-using Kuiper.Platform.ManagementObjects.v1alpha1;
-using Kuiper.ResourceServer.Service;
+using Kuiper.Platform.Modules;
 using Kuiper.ResourceServer.Service.Core;
 using Kuiper.ServiceInfra.Abstractions.Persistence;
 using Kuiper.ServiceInfra.Persistence;

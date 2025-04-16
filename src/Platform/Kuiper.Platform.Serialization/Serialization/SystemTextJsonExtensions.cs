@@ -16,10 +16,6 @@ namespace Kuiper.Platform.Serialization.Serialization
 
     public static class SystemTextJsonExtensions
     {
-        private static readonly JsonSerializerOptions IndentedWriteOptions = CreateJsonSerializerOptions(true, true);
-        private static readonly JsonSerializerOptions StandardWriteOptions = CreateJsonSerializerOptions(false, true);
-        private static readonly JsonSerializerOptions StandardReadOptions = CreateJsonSerializerOptions(false, false);
-
         public static string ObjectToJson<T>(this T obj, bool writeIndented = false)
             => JsonSerializer.Serialize(obj, obj.GetType(), GetJsonSerializerWriterOptions(writeIndented));
 
@@ -39,13 +35,13 @@ namespace Kuiper.Platform.Serialization.Serialization
             => JsonSerializer.Serialize(obj, type, options ?? GetJsonSerializerWriterOptions(false));
 
         public static T ObjectFromJson<T>(this string json, JsonSerializerOptions options = null)
-            => JsonSerializer.Deserialize<T>(json, options ?? StandardReadOptions);
+            => JsonSerializer.Deserialize<T>(json, options ?? SerializationSettings.StandardReadOptions);
 
         public static T ObjectFromJson<T>(this Stream stream, JsonSerializerOptions options = null)
-            => JsonSerializer.Deserialize<T>(stream, options ?? StandardReadOptions);
+            => JsonSerializer.Deserialize<T>(stream, options ?? SerializationSettings.StandardReadOptions);
 
         public static ValueTask<T> ObjectFromJsonAsync<T>(this Stream stream, JsonSerializerOptions options = null)
-            => JsonSerializer.DeserializeAsync<T>(stream, options ?? StandardReadOptions);
+            => JsonSerializer.DeserializeAsync<T>(stream, options ?? SerializationSettings.StandardReadOptions);
 
         public static T MarshalAs<T>(this object value, JsonSerializerOptions options = null)
         {
@@ -72,43 +68,22 @@ namespace Kuiper.Platform.Serialization.Serialization
 
         public static JsonElement JsonBytesToJsonElement(this byte[] value, JsonDocumentOptions? options = null)
         {
-            var document = JsonDocument.Parse(value, options ?? new JsonDocumentOptions()
+            if (options == null)
             {
-                AllowTrailingCommas = true,
-                CommentHandling = JsonCommentHandling.Skip,
-                MaxDepth = 100
-            });
+                options = new JsonDocumentOptions()
+                {
+                    AllowTrailingCommas = true,
+                    CommentHandling = JsonCommentHandling.Skip,
+                    MaxDepth = 100,
+                };
+            }
+
+            var document = JsonDocument.Parse(value, options.Value);
 
             return document.RootElement.Clone();
         }
 
-        private static JsonSerializerOptions GetJsonSerializerWriterOptions(bool writeIndented = false)
-            => writeIndented ? IndentedWriteOptions : StandardWriteOptions;
-
-        private static JsonSerializerOptions CreateJsonSerializerOptions(bool writeIndented, bool forSerialization)
-        {
-            var options = new JsonSerializerOptions()
-            {
-                WriteIndented = writeIndented,
-                PropertyNameCaseInsensitive = true,
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                IgnoreReadOnlyProperties = true,
-                IgnoreReadOnlyFields = true,
-                IncludeFields = true,
-                MaxDepth = 25,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                AllowTrailingCommas = true,
-                ReadCommentHandling = JsonCommentHandling.Skip,
-                NumberHandling = JsonNumberHandling.AllowReadingFromString,
-                Converters =
-                {
-                    new JsonStringEnumConverter(),
-                    new JsonBoolConverter(),
-                    new SystemTypeConverter(),
-                },
-            };
-
-            return options;
-        }
+        public static JsonSerializerOptions GetJsonSerializerWriterOptions(bool writeIndented)
+            => writeIndented ? SerializationSettings.IndentedWriteOptions : SerializationSettings.StandardWriteOptions;
     }
 }

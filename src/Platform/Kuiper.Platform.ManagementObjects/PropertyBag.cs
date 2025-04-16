@@ -4,14 +4,11 @@
 // For licensing inquiries, contact licensing@kuipersys.com
 // </copyright>
 
-namespace Kuiper.Platform.ManagementObjects
+namespace Kuiper.Platform.Serialization
 {
     using System.Collections.Generic;
 
-    using Newtonsoft.Json;
-
-    [JsonConverter(typeof(PropertyBagConverter))]
-    public class PropertyBag : Dictionary<string, object?>, IDictionary<string, object?>
+    public class PropertyBag : Dictionary<string, object>, IDictionary<string, object>
     {
         public T? Get<T>(string key)
         {

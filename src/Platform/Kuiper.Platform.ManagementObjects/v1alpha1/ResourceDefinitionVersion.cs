@@ -11,6 +11,7 @@ namespace Kuiper.Platform.ManagementObjects.v1alpha1
 
     using Kuiper.Platform.Framework.Abstractions.Objects;
     using Kuiper.Platform.ManagementObjects;
+    using Kuiper.Platform.Serialization;
 
     /// <summary>
     /// Represents a version of a resource definition. Used to define the schema and other properties of a resource.

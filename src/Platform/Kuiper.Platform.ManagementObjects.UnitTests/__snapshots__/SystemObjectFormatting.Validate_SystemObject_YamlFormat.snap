@@ -10,4 +10,3 @@ metadata:
     geo: us
     region: westus
     env: prod
-  annotations: {}

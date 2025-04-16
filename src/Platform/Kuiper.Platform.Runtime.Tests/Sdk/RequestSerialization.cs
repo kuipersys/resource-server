@@ -25,6 +25,11 @@ namespace Kuiper.Platform.Runtime.Tests.Sdk
             request.Target = new SystemObject
             {
                 ApiVersion = "v1",
+                Metadata =
+                {
+                    Name = "test",
+                    Namespace = "default",
+                },
             };
 
             var json = request.ObjectToJson(typeof(PlatformRequest), true);

@@ -4,7 +4,10 @@
 // For licensing inquiries, contact licensing@kuipersys.com
 // </copyright>
 
-namespace Kuiper.Platform.ManagementObjects.v1alpha1
+using Kuiper.Platform.ManagementObjects;
+using Kuiper.Platform.ManagementObjects.v1alpha1;
+
+namespace Kuiper.Platform.Modules
 {
     using System;
     using System.Threading.Tasks;

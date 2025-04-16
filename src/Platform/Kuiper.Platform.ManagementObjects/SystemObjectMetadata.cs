@@ -10,6 +10,8 @@ namespace Kuiper.Platform.ManagementObjects
     using System.ComponentModel.DataAnnotations;
     using System.Text.Json.Serialization;
 
+    using Kuiper.Platform.Serialization;
+
     using NJsonSchema.Annotations;
     /// <summary>
     /// https://kubernetes.io/blog/2024/10/02/steering-committee-results-2024/
