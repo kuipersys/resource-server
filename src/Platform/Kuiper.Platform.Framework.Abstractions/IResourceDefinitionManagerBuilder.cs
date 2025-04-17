@@ -4,13 +4,11 @@
 // For licensing inquiries, contact licensing@kuipersys.com
 // </copyright>
 
-using Kuiper.Platform.Framework.Abstractions.Objects;
-
 namespace Kuiper.Platform.Framework.Abstractions
 {
     public interface IResourceDefinitionManagerBuilder
     {
-        IResourceDefinitionManagerBuilder RegisterResourceDefinition<TResource>(TResource resource)
-            where TResource : IResourceDefinition;
+        IResourceDefinitionManagerBuilder RegisterResourceDefinition<TResourceDefinition>(TResourceDefinition resourceDefinition)
+            where TResourceDefinition : class, new();
     }
 }

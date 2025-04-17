@@ -7,7 +7,6 @@
 namespace Kuiper.ResourceServer.Service.Core
 {
     using Kuiper.Platform.Framework.Abstractions;
-    using Kuiper.Platform.Framework.Abstractions.Objects;
     using Kuiper.Platform.ManagementObjects.v1alpha1;
     using Kuiper.ServiceInfra.Abstractions.Persistence;
 
@@ -42,27 +41,27 @@ namespace Kuiper.ResourceServer.Service.Core
             return this;
         }
 
-        public IResourceDefinitionManagerBuilder RegisterResourceDefinition<TResource>(TResource resourceDefinition)
-            where TResource : IResourceDefinition
+        public IResourceDefinitionManagerBuilder RegisterResourceDefinition<TResourceDefinition>(TResourceDefinition resourceDefinition)
+            where TResourceDefinition : class, new()
         {
+            var resourceDefinitionObject = resourceDefinition as ResourceDefinition;
+
             if (resourceDefinition is null)
             {
                 throw new ArgumentNullException(nameof(resourceDefinition));
             }
 
-            var resourceDefinitionObject = resourceDefinition as ResourceDefinition;
-
             if (resourceDefinitionObject is null)
             {
-                throw new ArgumentException($"Resource definition '{resourceDefinition.GetType().Name}' is not a valid resource definition.", nameof(resourceDefinition));
+                throw new ArgumentException($"Resource definition '{resourceDefinitionObject.GetType().Name}' is not a valid resource definition.", nameof(resourceDefinition));
             }
 
-            if (!this.resourceDefinitions.TryAdd(resourceDefinition.GetKey(), resourceDefinitionObject))
+            if (!this.resourceDefinitions.TryAdd(resourceDefinitionObject.GetKey(), resourceDefinitionObject))
             {
                 throw new ArgumentException($"Resource definition with key '{resourceDefinitionObject.GetKey()}' already exists.", nameof(resourceDefinition));
             }
 
-            foreach (var version in resourceDefinition.GetVersions<ResourceDefinitionVersion>())
+            foreach (var version in resourceDefinitionObject.GetVersions())
             {
                 if (!this.resourceDefinitionVersions.TryAdd(version.Key, version.Value))
                 {

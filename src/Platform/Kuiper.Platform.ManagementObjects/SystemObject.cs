@@ -9,14 +9,13 @@ namespace Kuiper.Platform.ManagementObjects
     using System.ComponentModel.DataAnnotations;
     using System.Text.Json.Serialization;
 
-    using Kuiper.Platform.Framework.Abstractions.Objects;
     using Kuiper.Platform.Serialization;
 
     using NJsonSchema.Annotations;
 
     [JsonSchemaIgnore]
     [JsonDerivedType(typeof(SystemObject), nameof(SystemObject))]
-    public class SystemObject : ISystemObject
+    public class SystemObject
     {
         [Required]
         [JsonPropertyOrder(0)]

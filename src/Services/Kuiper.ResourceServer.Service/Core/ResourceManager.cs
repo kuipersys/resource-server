@@ -142,7 +142,7 @@ namespace Kuiper.ResourceServer.Service.Core
 
             this.resources.Add(key, definition);
 
-            foreach (var version in definition.GetVersions<ResourceDefinitionVersion>())
+            foreach (var version in definition.GetVersions())
             {
                 if (this.resourceVersions.ContainsKey(version.Key))
                 {

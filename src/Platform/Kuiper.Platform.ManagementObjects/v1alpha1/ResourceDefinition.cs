@@ -6,16 +6,14 @@
 
 namespace Kuiper.Platform.ManagementObjects.v1alpha1
 {
-    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel.DataAnnotations;
     using System.Text.Json.Serialization;
 
-    using Kuiper.Platform.Framework.Abstractions.Objects;
     using Kuiper.Platform.ManagementObjects;
 
-    public sealed class ResourceDefinition : SystemObject, IResourceDefinition
+    public sealed class ResourceDefinition : SystemObject
     {
         [Required]
         [JsonPropertyOrder(100)]
@@ -27,27 +25,20 @@ namespace Kuiper.Platform.ManagementObjects.v1alpha1
             return $"{this.Spec.Group}/{this.Spec.Names.Kind}";
         }
 
-        public IDictionary<string, TVersionObject> GetVersions<TVersionObject>()
-            where TVersionObject : class, IResourceDefinitionVersion
+        public IDictionary<string, ResourceDefinitionVersion> GetVersions()
         {
-            IDictionary<string, TVersionObject> versions = new Dictionary<string, TVersionObject>();
+            IDictionary<string, ResourceDefinitionVersion> versions = new Dictionary<string, ResourceDefinitionVersion>();
 
             foreach (var version in this.Spec.Versions)
             {
-                var versionObject = version as TVersionObject;
-
-                if (versionObject == null)
-                {
-                    throw new InvalidCastException($"Cannot cast {version.GetType()} to {typeof(TVersionObject)}");
-                }
 
                 if (version.Enabled)
                 {
-                    versions.Add($"{this.GetKey()}/{version.Name}", versionObject);
+                    versions.Add($"{this.GetKey()}/{version.Name}", version);
                 }
             }
 
-            return new ReadOnlyDictionary<string, TVersionObject>(versions);
+            return new ReadOnlyDictionary<string, ResourceDefinitionVersion>(versions);
         }
     }
 }
