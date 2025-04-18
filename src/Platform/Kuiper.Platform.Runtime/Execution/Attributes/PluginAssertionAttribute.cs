@@ -44,7 +44,7 @@ namespace Kuiper.Platform.Runtime.Execution.Attributes
         /// <param name="stepType">The ClrType for the step.</param>
         /// <param name="context">The current execution context.</param>
         /// <exception cref="AggregateException">The aggregation of all failed assertions.</exception>
-        public static void ExecuteAssertions(ExecutionPhase phase, Type stepType, IExecutionContext context)
+        public static void ExecuteAssertions(ExecutionPhase phase, Type stepType, IRuntimeExecutionContext context)
         {
             var attributes = GetTypeAssertionAttributes(phase, stepType);
 
@@ -81,7 +81,7 @@ namespace Kuiper.Platform.Runtime.Execution.Attributes
         /// <param name="context">The current execution context.</param>
         /// <returns>An awaitable task.</returns>
         /// <exception cref="AggregateException">The aggregation of all failed assertions.</exception>
-        public static Task ExecuteAssertionsAsync(ExecutionPhase phase, Type stepType, IExecutionContext context)
+        public static Task ExecuteAssertionsAsync(ExecutionPhase phase, Type stepType, IRuntimeExecutionContext context)
         {
             return Task.Factory.StartNew(
                 () =>
@@ -94,7 +94,7 @@ namespace Kuiper.Platform.Runtime.Execution.Attributes
         /// The method used in the assertion.
         /// </summary>
         /// <param name="context">The context this assertion applies to.</param>
-        public abstract void Assert(IExecutionContext context);
+        public abstract void Assert(IRuntimeExecutionContext context);
 
         private static IEnumerable<PluginAssertionAttribute> GetTypeAssertionAttributes(ExecutionPhase phase, Type type)
         {

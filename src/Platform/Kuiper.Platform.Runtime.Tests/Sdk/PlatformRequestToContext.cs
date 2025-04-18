@@ -30,12 +30,12 @@ namespace Kuiper.Platform.Runtime.Tests.Sdk
                 ApiVersion = "v1",
             };
 
-            IInternalExecutionContext context = request.ToExecutionContext();
-            string json = context.ObjectToJson(typeof(IInternalExecutionContext), true);
+            IInternalRuntimeExecutionContext context = request.ToExecutionContext();
+            string json = context.ObjectToJson(typeof(IInternalRuntimeExecutionContext), true);
             json.MatchSnapshot();
 
-            IInternalExecutionContext result = json.ObjectFromJson<IInternalExecutionContext>();
-            result.ShouldBeOfType<PlatformRequestExecutionContext>();
+            IInternalRuntimeExecutionContext result = json.ObjectFromJson<IInternalRuntimeExecutionContext>();
+            result.ShouldBeOfType<PlatformRuntimeExecutionContext>();
         }
 
         [Fact]

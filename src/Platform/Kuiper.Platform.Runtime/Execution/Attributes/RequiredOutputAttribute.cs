@@ -27,7 +27,7 @@ namespace Kuiper.Platform.Runtime.Execution.Attributes
             this.errorMessage = $"Cannot cast OutputParameter['{this.variableName}'] to {this.variableType.FullName}.";
         }
 
-        public override void Assert(IExecutionContext context)
+        public override void Assert(IRuntimeExecutionContext context)
         {
             context.OutputParameters.ThrowIfKeyNotFound(this.variableName);
             context.OutputParameters[this.variableName]

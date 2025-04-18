@@ -10,9 +10,9 @@ namespace Kuiper.Platform.Runtime.Execution
 
     public static class PlatformRequestExtensions
     {
-        public static IInternalExecutionContext ToExecutionContext(this PlatformRequest request, CancellationToken cancellationToken = default)
+        public static IInternalRuntimeExecutionContext ToExecutionContext(this PlatformRequest request, CancellationToken cancellationToken = default)
         {
-            return new PlatformRequestExecutionContext(request)
+            return new PlatformRuntimeExecutionContext(request)
             {
                 CancellationToken = cancellationToken,
             };

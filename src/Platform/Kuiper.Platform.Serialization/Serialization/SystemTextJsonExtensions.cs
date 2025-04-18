@@ -83,6 +83,23 @@ namespace Kuiper.Platform.Serialization.Serialization
             return document.RootElement.Clone();
         }
 
+        public static async Task<JsonElement> StreamToJsonElementAsync(this Stream stream, JsonDocumentOptions? options = null)
+        {
+            if (options == null)
+            {
+                options = new JsonDocumentOptions()
+                {
+                    AllowTrailingCommas = true,
+                    CommentHandling = JsonCommentHandling.Skip,
+                    MaxDepth = 100,
+                };
+            }
+
+            var document = await JsonDocument.ParseAsync(stream, options.Value);
+
+            return document.RootElement.Clone();
+        }
+
         public static JsonSerializerOptions GetJsonSerializerWriterOptions(bool writeIndented)
             => writeIndented ? SerializationSettings.IndentedWriteOptions : SerializationSettings.StandardWriteOptions;
     }

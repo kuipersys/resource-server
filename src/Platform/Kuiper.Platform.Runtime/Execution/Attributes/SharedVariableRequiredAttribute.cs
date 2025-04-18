@@ -24,7 +24,7 @@ namespace Kuiper.Platform.Runtime.Execution.Attributes
             this.variableType = variableType;
         }
 
-        public override void Assert(IExecutionContext context)
+        public override void Assert(IRuntimeExecutionContext context)
         {
             context.SharedVariables.ThrowIfKeyNotFound(this.variableName);
 

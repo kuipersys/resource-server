@@ -4,8 +4,6 @@
 // For licensing inquiries, contact licensing@kuipersys.com
 // </copyright>
 
-using Kuiper.Platform.Framework.Abstractions;
-using Kuiper.Platform.Modules;
 using Kuiper.ResourceServer.Service.Core;
 using Kuiper.ServiceInfra.Abstractions.Persistence;
 using Kuiper.ServiceInfra.Persistence;
@@ -14,51 +12,32 @@ namespace Kuiper.ResourceServer.Service.Middleware;
 
 public static class KuiperServicesExtensions
 {
-    public static IServiceCollection AddKuiperServices(this IServiceCollection services, KuiperEndpointConfiguration? endpointConfiguration = null)
+    public static async Task<IServiceCollection> AddKuiperServicesAsync(this IServiceCollection services, IConfiguration configuration, KuiperEndpointConfiguration? endpointConfiguration = null)
     {
+        var store = CreateKeyValueStore(configuration);
+        var resourceManager = new ResourceManager(store);
+        await resourceManager.InitializeAsync();
+
         services
-            .AddSingleton(services =>
-            {
-                var store = services.GetRequiredService<IKeyValueStore>();
-                var builder = new ResourceDefinitionManagerBuilder(store, new CoreResourceModule());
-
-                var modules = services.GetServices<IPlatformModule>();
-                if (modules != null && modules.Count() > 0)
-                {
-                    foreach (var module in modules)
-                    {
-                        builder.RegisterModule(module);
-                    }
-                }
-
-                return builder;
-            })
-            .AddSingleton<IResourceManager>(services =>
-            {
-                var builder = services.GetRequiredService<ResourceDefinitionManagerBuilder>();
-                ResourceManager resourceManager = new ResourceManager(services.GetRequiredService<IKeyValueStore>());
-                Task initTask = resourceManager.InitializeAsync(builder);
-                initTask.Wait(CancellationToken.None);
-
-                if (initTask.IsFaulted)
-                {
-                    throw initTask.Exception ?? new Exception("Failed to initialize resource manager");
-                }
-
-                if (initTask.IsCanceled)
-                {
-                    throw new Exception("Failed to initialize resource manager");
-                }
-
-                return resourceManager;
-            })
-            .AddSingleton<IResourceRequestValidator, ResourceRequestValidator>()
+            .AddSingleton(store)
+            .AddSingleton<IResourceManager>(resourceManager)
             .AddScoped<PlatformRequestMiddleware>()
             .AddPluginRuntime()
-            .AddSingleton(services => FileSystemKeyValueStore.Create("C:\\CloudApi\\ResourceProvider\\Data"))
             .AddSingleton(endpointConfiguration ?? new KuiperEndpointConfiguration());
 
         return services;
+    }
+
+    private static IKeyValueStore CreateKeyValueStore(IConfiguration configuration)
+    {
+        string path = configuration["Kuiper:KeyValueStore:Path"] ?? "./data";
+
+        if (!Directory.Exists(path))
+        {
+            Directory.CreateDirectory(path);
+        }
+
+        return FileSystemKeyValueStore.Create(path);
     }
 
     /// <summary>
@@ -67,7 +46,8 @@ public static class KuiperServicesExtensions
     /// <param name="endpoints"></param>
     /// <param name="endpointConfiguration"></param>
     /// <returns></returns>
-    private static IEndpointConventionBuilder MapPlatformApiEndpoints(this IEndpointRouteBuilder endpoints,
+    private static IEndpointConventionBuilder MapPlatformApiEndpoints(
+        this IEndpointRouteBuilder endpoints,
         KuiperEndpointConfiguration endpointConfiguration)
     {
         var pipeline = endpoints

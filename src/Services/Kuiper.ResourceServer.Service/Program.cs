@@ -5,10 +5,14 @@
 // </copyright>
 
 using System.Runtime.InteropServices;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
-using Kuiper.ResourceServer.Service.Middleware;
+using Kuiper.Platform.Runtime.Abstractions.Command;
+using Kuiper.ResourceServer.Service.CommandHandlers;
+using Kuiper.ResourceServer.Service.Core;
+using Kuiper.ServiceInfra.Abstractions.Persistence;
+using Kuiper.ServiceInfra.Persistence;
+
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Kuiper.ResourceServer.Service;
 
@@ -19,77 +23,20 @@ public class Program
         return RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
     }
 
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        // builder.Configuration.AddKuiperPlatformConfiguration();
+        builder.Services.AddKuiperWebHostRuntime();
+        builder.Services.AddSingleton(services => FileSystemKeyValueStore.Create("./data"));
 
-        // Add services to the container.
-        builder.Services.AddAuthorization();
-        builder.Services.AddKuiperServices();
-        //builder.Services.AddAuthentication(options =>
-        //{
-        //    options.AddScheme<MutualTlsAuthenticationHandler>(MutualTlsAuthenticationHandler.SchemeName, MutualTlsAuthenticationHandler.DisplayName);
-        //});
-
-        //builder.Services.AddResourceHandlers();
-        //builder.Services.AddScoped<IKeyValueStore, KvStoreDbContext>();
-
-        builder.Services.ConfigureHttpJsonOptions(options =>
-        {
-            options.SerializerOptions.ReadCommentHandling = JsonCommentHandling.Skip;
-            options.SerializerOptions.PropertyNameCaseInsensitive = true;
-            options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-            options.SerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
-            options.SerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
-            options.SerializerOptions.IgnoreReadOnlyFields = true;
-            options.SerializerOptions.IgnoreReadOnlyProperties = false;
-            options.SerializerOptions.IncludeFields = true;
-            options.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-
-            options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
-        });
-
-        //builder.Services.AddDbContext<KvStoreDbContext>(options =>
-        //{
-        //    // options.UseInMemoryDatabase("kvstore");
-
-        //    // Get application data directory
-        //    var application_data = Environment.SpecialFolder.ApplicationData;
-
-        //    // Create a directory for the application data
-        //    string application_data_path = Path.Combine(Environment.GetFolderPath(application_data), "kuiper_data");
-
-        //    if (IsLinux())
-        //    {
-        //        application_data_path = "/var/lib/kuiperdb";
-        //    }
-
-        //    var system_db_path = Path.Combine(application_data_path, "system.db");
-
-        //    Console.WriteLine($"Database Path: {system_db_path}");
-
-        //    if (!Directory.Exists(application_data_path))
-        //    {
-        //        Console.WriteLine("Creating data directory ...");
-        //        Directory.CreateDirectory(application_data_path);
-        //    }
-
-        //    // Configure the database to use SQLite
-        //    options.UseSqlite($"Data Source={system_db_path}");
-        //});
+        builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<ICommandHandler, GetResourceCommandHandler>());
+        builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<ICommandHandler, ListResourceCommandHandler>());
 
         var app = builder.Build();
-        // Configure the HTTP request pipeline.
+        app.UseKuiperWebHostRuntime();
 
-        //app.UseAuthentication();
-        app.UseAuthorization();
-
-        //app
-        //    .MapKuiperServicesEndpoints(app)
-        //    .MapKuiperResources();
-
-        app.MapKuiperServicesEndpoints();
+        ResourceManager resourceManager = new ResourceManager(app.Services.GetRequiredService<IKeyValueStore>());
+        await resourceManager.InitializeAsync();
 
         app.Run();
     }

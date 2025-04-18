@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kuiper.Platform.Runtime.Abstractions\Kuiper.Platform.Runtime.Abstractions.csproj" />
+    <ProjectReference Include="..\src\Platform\Kuiper.Platform.Runtime\Kuiper.Platform.Runtime.csproj" />
+  </ItemGroup>
+  
+</Project>

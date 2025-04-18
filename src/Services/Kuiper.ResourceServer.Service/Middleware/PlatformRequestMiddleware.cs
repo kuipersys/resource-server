@@ -16,24 +16,14 @@ namespace Kuiper.ResourceServer.Service.Middleware
 
     public class PlatformRequestMiddleware : IMiddleware
     {
-        private readonly string[] SupportedVerbs = new string[] { "GET", "PUT", "POST", "DELETE", "PATCH" };
-        private readonly string[] PayloadVerbs = new string[] { "PUT", "POST", "PATCH" };
-        private readonly IReadOnlyDictionary<string, string> VerbMapping = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-        {
-            { "GET", "Get" },
-            { "PUT", "Put" },
-            { "POST", "Post" },
-            { "DELETE", "Delete" },
-            { "PATCH", "Patch" },
-        };
+        private readonly string[] supportedVerbs = new string[] { "GET", "PUT", "POST", "DELETE", "PATCH" };
+        private readonly string[] payloadVerbs = new string[] { "PUT", "POST", "PATCH" };
 
         private readonly PlatformRuntime platformRuntime;
-        private readonly IResourceRequestValidator resourceValidator;
 
-        public PlatformRequestMiddleware(PlatformRuntime platformRuntime, IResourceRequestValidator resourceValidator)
+        public PlatformRequestMiddleware(PlatformRuntime platformRuntime)
         {
             this.platformRuntime = platformRuntime;
-            this.resourceValidator = resourceValidator;
         }
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
@@ -48,7 +38,8 @@ namespace Kuiper.ResourceServer.Service.Middleware
                     await this.ExecuteAsync(context);
                     return;
                 }
-                else if (this.SupportedVerbs.Contains(context.Request.Method) && context.Request.Path.StartsWithSegments("/api", StringComparison.InvariantCultureIgnoreCase, out PathString remaining))
+                else if (this.supportedVerbs.Contains(context.Request.Method) && 
+                    context.Request.Path.StartsWithSegments("/api", StringComparison.InvariantCultureIgnoreCase, out PathString remaining))
                 {
                     await this.ExecuteVerbAsync(context, remaining);
                     return;
@@ -70,7 +61,7 @@ namespace Kuiper.ResourceServer.Service.Middleware
                         Code = ex.HttpResponseCode,
                         Details = [
                             ex.ToString()
-                        ]
+                        ],
                     },
                 };
                 context.Response.StatusCode = ex.HttpResponseCode;
@@ -90,7 +81,7 @@ namespace Kuiper.ResourceServer.Service.Middleware
             // Convert Context into platform request
             PlatformRequest? platformRequest = null;
             ResourcePathParser.TryParse(subPath, out ResourceDescriptor? resourceDescriptor);
-            bool isPayloadVerb = this.PayloadVerbs.Contains(context.Request.Method);
+            bool isPayloadVerb = this.payloadVerbs.Contains(context.Request.Method);
             bool allowSystemModification = context.Request.Headers.TryGetValue("x-allow-system-modification", out var value) &&
                 bool.TryParse(value, out var boolValue) &&
                 boolValue;
@@ -104,7 +95,7 @@ namespace Kuiper.ResourceServer.Service.Middleware
             switch (context.Request.Method)
             {
                 case "GET":
-                    platformRequest = await this.CreateGetRequestAsync(resourceDescriptor);
+                    platformRequest = this.CreateGetRequest(resourceDescriptor);
                     break;
                 case "PUT":
                     platformRequest = await this.CreatePutRequestAsync(context, resourceDescriptor, allowSystemModification);
@@ -113,7 +104,7 @@ namespace Kuiper.ResourceServer.Service.Middleware
                 //    platformRequest = await this.CreatePostRequestAsync(context, resourceDescriptor);
                 //    break;
                 case "DELETE":
-                    platformRequest = await this.CreateDeleteRequestAsync(resourceDescriptor, allowSystemModification);
+                    platformRequest = this.CreateDeleteRequest(resourceDescriptor, allowSystemModification);
                     break;
                 //case "PATCH":
                 //    platformRequest = await this.CreatePatchRequestAsync(context, resourceDescriptor);
@@ -153,67 +144,42 @@ namespace Kuiper.ResourceServer.Service.Middleware
             await result.ObjectToJsonAsync(context.Response.Body, true);
         }
 
-        private async Task<PlatformRequest?> CreateGetRequestAsync(ResourceDescriptor? resourceDescriptor)
+        private PlatformRequest CreateGetRequest(ResourceDescriptor? resourceDescriptor)
         {
-            await this.resourceValidator.ValidateAsync(resourceDescriptor, throwOnNull: true);
-
-            return new PlatformRequest
-            {
-                Message = string.IsNullOrWhiteSpace(resourceDescriptor!.Name) ? "List" : "Get",
-                InputParameters =
-                    {
-                        ["target"] = resourceDescriptor,
-                    },
-            };
+            string message = string.IsNullOrWhiteSpace(resourceDescriptor!.Name) ? "List" : "Get";
+            return new PlatformRequest(message, resourceDescriptor);
         }
 
-        private async Task<PlatformRequest?> CreateDeleteRequestAsync(ResourceDescriptor? resourceDescriptor, bool allowSystemModification)
+        private PlatformRequest CreateDeleteRequest(ResourceDescriptor? resourceDescriptor, bool allowSystemModification)
         {
-            await this.resourceValidator.ValidateAsync(resourceDescriptor, throwOnNull: true);
-
-            if (!allowSystemModification && resourceDescriptor.Name.StartsWith("$"))
+            return new PlatformRequest("Delete", resourceDescriptor)
             {
-                throw new PlatformException(
-                    "System resources cannot be modified",
-                    PlatformErrorCodes.Forbidden);
-            }
-
-            return new PlatformRequest
-            {
-                Message = "Delete",
                 InputParameters =
-                    {
-                        ["target"] = resourceDescriptor,
-                    },
+                {
+                    ["allowSystemModification"] = allowSystemModification,
+                },
             };
         }
 
         private async Task<PlatformRequest?> CreatePutRequestAsync(HttpContext context, ResourceDescriptor? resourceDescriptor, bool allowSystemModification)
         {
-            // Validate the descriptor
-            await this.resourceValidator.ValidateAsync(resourceDescriptor, throwOnNull: false);
-
             var target = await context.Request.Body.ObjectFromJsonAsync<SystemObject>();
 
             if (resourceDescriptor != null)
             {
                 target.Metadata = target.Metadata ?? new SystemObjectMetadata();
-                target.ApiVersion = resourceDescriptor.ApiVersion;
                 target.Kind = resourceDescriptor.Kind;
                 target.Metadata.Namespace = resourceDescriptor.Namespace;
                 target.Metadata.Name = resourceDescriptor.Name ?? target.Metadata.Name;
             }
 
-            if (!allowSystemModification && target.Metadata?.Name?.StartsWith("$") == true)
+            var request = new PlatformRequest("Put", target)
             {
-                throw new PlatformException(
-                    "System resources cannot be modified",
-                    PlatformErrorCodes.Forbidden);
-            }
-
-            await this.resourceValidator.ValidateAsync(target);
-
-            var request = new PlatformRequest("Put", target);
+                InputParameters =
+                {
+                    ["allowSystemModification"] = allowSystemModification,
+                },
+            };
 
             return request;
         }

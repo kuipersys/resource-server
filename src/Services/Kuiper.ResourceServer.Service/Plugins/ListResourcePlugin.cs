@@ -19,7 +19,7 @@ namespace Kuiper.ResourceServer.Service.Plugins
         public async Task ExecuteAsync(IServiceProvider serviceProvider)
         {
             var store = serviceProvider.GetRequiredService<IKeyValueStore>();
-            var context = serviceProvider.GetRequiredService<IExecutionContext>();
+            var context = serviceProvider.GetRequiredService<IRuntimeExecutionContext>();
             ResourceDescriptor resourceDescriptor = context
                 .InputParameters["target"]
                 .MarshalAs<ResourceDescriptor>();

@@ -21,7 +21,7 @@ namespace Kuiper.Platform.Runtime.Tests.Execution.Plugins
     {
         public Task ExecuteAsync(IServiceProvider serviceProvider)
         {
-            var executionContext = (IExecutionContext)serviceProvider.GetService(typeof(IExecutionContext));
+            var executionContext = (IRuntimeExecutionContext)serviceProvider.GetService(typeof(IRuntimeExecutionContext));
             executionContext.OutputParameters["WasExecuted"] = true;
 
             if (executionContext.SharedVariables.ContainsKey("iterations"))

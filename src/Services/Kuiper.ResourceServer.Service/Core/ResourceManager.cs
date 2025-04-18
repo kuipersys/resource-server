@@ -10,7 +10,8 @@ namespace Kuiper.ResourceServer.Service.Core
 
     using Kuiper.Platform.Framework.Abstractions;
     using Kuiper.Platform.ManagementObjects;
-    using Kuiper.Platform.ManagementObjects.v1alpha1;
+    using Kuiper.Platform.ManagementObjects.v1alpha1.Resource;
+    using Kuiper.Platform.Modules;
     using Kuiper.Platform.Serialization.Serialization;
     using Kuiper.ServiceInfra.Abstractions.Persistence;
 
@@ -24,7 +25,8 @@ namespace Kuiper.ResourceServer.Service.Core
         private readonly IDictionary<string, ResourceDefinitionVersion> resourceVersions
             = new Dictionary<string, ResourceDefinitionVersion>(StringComparer.OrdinalIgnoreCase);
 
-        private bool isLoaded = false;
+        private bool isInitialized = false;
+        private SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
 
         public ResourceManager(IKeyValueStore store)
         {
@@ -62,7 +64,7 @@ namespace Kuiper.ResourceServer.Service.Core
             }
         }
 
-        internal static async Task PersistResourceDefinitionsAsync(IKeyValueStore store, ResourceDefinition resourceDefinition, bool overwrite = false, CancellationToken cancellationToken = default)
+        internal static async Task PersistResourceDefinitionAsync(IKeyValueStore store, ResourceDefinition resourceDefinition, bool overwrite = false, CancellationToken cancellationToken = default)
         {
             if (store == null)
             {
@@ -88,15 +90,42 @@ namespace Kuiper.ResourceServer.Service.Core
             }
         }
 
-        private async Task LoadAsync(CancellationToken cancellationToken = default)
+        internal async Task InitializeAsync()
         {
-            if (this.isLoaded)
+            if (!this.semaphoreSlim.Wait(TimeSpan.FromSeconds(5)))
             {
-                return;
+                throw new TimeoutException("ResourceManager bootstrap semaphore timed out.");
             }
 
-            this.isLoaded = true;
+            try
+            {
+                if (this.isInitialized)
+                {
+                    return;
+                }
 
+                await this.InitializeCoreResourceDefinitionsAsync();
+                await this.LoadAsync(CancellationToken.None);
+            }
+            finally
+            {
+                this.semaphoreSlim.Release();
+            }
+        }
+
+        private async Task InitializeCoreResourceDefinitionsAsync()
+        {
+            var coreResourceDefinitions = CoreResourceModule.GetResourceDefinitions();
+            foreach (var resourceDefinition in coreResourceDefinitions)
+            {
+                await PersistResourceDefinitionAsync(this.store, resourceDefinition);
+
+                this.AddResourceDefinition(resourceDefinition);
+            }
+        }
+
+        private async Task LoadAsync(CancellationToken cancellationToken = default)
+        {
             var resourceDescriptor = new ResourceDescriptor
             {
                 Namespace = SystemConstants.Resources.GLOBAL_NAMESPACE,
@@ -151,12 +180,6 @@ namespace Kuiper.ResourceServer.Service.Core
 
                 this.resourceVersions.Add(version.Key, version.Value);
             }
-        }
-
-        internal async Task InitializeAsync(ResourceDefinitionManagerBuilder builder)
-        {
-            await builder.InitializeSystemResourceDefinitions(CancellationToken.None);
-            await this.LoadAsync(CancellationToken.None);
         }
     }
 }

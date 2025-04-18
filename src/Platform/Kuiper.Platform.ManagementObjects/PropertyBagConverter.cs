@@ -4,13 +4,11 @@
 // For licensing inquiries, contact licensing@kuipersys.com
 // </copyright>
 
-namespace Kuiper.Platform.Serialization
+namespace Kuiper.Platform.ManagementObjects
 {
     using System;
     using System.Text.Json;
     using System.Text.Json.Serialization;
-
-    using Kuiper.Platform.ManagementObjects;
 
     internal class PropertyBagConverter : JsonConverter<PropertyBag>
     {

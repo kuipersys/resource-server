@@ -14,7 +14,7 @@ namespace Kuiper.Platform.Runtime
 
     using Microsoft.Extensions.DependencyInjection;
 
-    public sealed class PlatformRuntime
+    public class PlatformRuntime
     {
         private readonly IPluginRuntime pluginRuntime;
         private readonly Func<IServiceCollection, Task> configureExecutionServices;
@@ -25,12 +25,20 @@ namespace Kuiper.Platform.Runtime
             this.configureExecutionServices = configureExecutionServices;
         }
 
+        protected event EventHandler<IServiceProvider>? OnValidating;
+
+        protected event EventHandler<IServiceProvider>? OnMutating;
+
+        protected event EventHandler<IServiceProvider>? OnFinalize;
+
+        protected event EventHandler<IServiceProvider>? OnNotify;
+
         public async Task<PlatformResponse> ExecuteAsync(PlatformRequest request, CancellationToken cancellationToken = default)
         {
             // TODO: Capture exceptions and return a PlatformResponse with the exception details
             try
             {
-                IInternalExecutionContext context = request.ToExecutionContext(cancellationToken);
+                IInternalRuntimeExecutionContext context = request.ToExecutionContext(cancellationToken);
                 await this.ExecuteAsync(context);
                 return context.ToPlatformResponse();
             }
@@ -54,10 +62,10 @@ namespace Kuiper.Platform.Runtime
             }
         }
 
-        private async Task ExecuteAsync(IInternalExecutionContext context)
+        private async Task ExecuteAsync(IInternalRuntimeExecutionContext context)
         {
             IServiceCollection descriptors = new ServiceCollection();
-            descriptors.AddSingleton<IExecutionContext>(context);
+            descriptors.AddSingleton<IRuntimeExecutionContext>(context);
 
             if (this.configureExecutionServices != null)
             {
@@ -67,6 +75,7 @@ namespace Kuiper.Platform.Runtime
             using ServiceProvider services = descriptors.BuildServiceProvider();
             using IServiceScope scope = services.CreateScope();
 
+            // TODO: Use transacted stores ...
             context.SetStep(OperationStep.PreOperation);
             await this.pluginRuntime.ExecuteAsync(scope.ServiceProvider);
 

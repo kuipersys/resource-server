@@ -17,10 +17,13 @@ namespace Kuiper.Platform.Runtime.Extensibility
     /// </summary>
     public class PluginManager : IPluginManager, IPluginProvider
     {
-        private readonly IDictionary<string, IDictionary<OperationStep, IList<IPlugin>>> operations = new Dictionary<string, IDictionary<OperationStep, IList<IPlugin>>>();
+        private readonly IDictionary<OperationStep, IDictionary<string, IList<IPlugin>>> operations = new Dictionary<OperationStep, IDictionary<string, IList<IPlugin>>>();
 
         public PluginManager()
         {
+            this.operations.Add(OperationStep.PreOperation, new Dictionary<string, IList<IPlugin>>());
+            this.operations.Add(OperationStep.Operation, new Dictionary<string, IList<IPlugin>>());
+            this.operations.Add(OperationStep.PostOperation, new Dictionary<string, IList<IPlugin>>());
         }
 
         public void RegisterPlugin(string message, OperationStep step, IPlugin plugin, int order = 0)
@@ -35,16 +38,9 @@ namespace Kuiper.Platform.Runtime.Extensibility
                 throw new Exception("You cannot specify more than one wild-card in the message name.");
             }
 
-            if (!this.operations.ContainsKey(message))
+            if (!this.operations[step].ContainsKey(message))
             {
-                var ops = new Dictionary<OperationStep, IList<IPlugin>>()
-                {
-                    [OperationStep.PreOperation] = new List<IPlugin>(),
-                    [OperationStep.Operation] = new List<IPlugin>(),
-                    [OperationStep.PostOperation] = new List<IPlugin>(),
-                };
-
-                this.operations.Add(message, ops);
+                this.operations[step].Add(message, new List<IPlugin>());
             }
 
             switch (step)
@@ -52,7 +48,7 @@ namespace Kuiper.Platform.Runtime.Extensibility
                 case OperationStep.PreOperation:
                 case OperationStep.PostOperation:
                 case OperationStep.Operation:
-                    var stepOperations = this.operations[message][step];
+                    var stepOperations = this.operations[step][message];
                     stepOperations.Insert(order, plugin);
                     break;
 
@@ -84,48 +80,14 @@ namespace Kuiper.Platform.Runtime.Extensibility
                 throw new InvalidOperationException("You cannot specify a wild-card for the message name");
             }
 
-            if (this.operations.TryGetValue(message, out var plugins))
+            var stepOperations = this.operations[step].Where(v => (v.Key.Equals("*") || (v.Key.Contains("*") && message.StartsWith(v.Key.TrimEnd('*')))) || v.Key.Equals(message));
+
+            if (stepOperations.Count() == 0)
             {
-                return plugins[step].ToArray();
+                return Enumerable.Empty<IPlugin>();
             }
 
-            return Array.Empty<IPlugin>();
-        }
-
-        private IEnumerable<IPlugin> ResolvePlugins2(OperationStep step, string message)
-        {
-            if (string.IsNullOrWhiteSpace(message))
-            {
-                throw new ArgumentNullException(nameof(message));
-            }
-
-            if (message.Contains("*"))
-            {
-                throw new InvalidOperationException("You cannot specify a wild-card for the message name");
-            }
-
-            switch (step)
-            {
-                case OperationStep.PreOperation:
-                case OperationStep.PostOperation:
-                case OperationStep.Operation:
-                    // TODO: Ordering
-                    var stepOperations = this.operations.Where(v =>
-                        v.Key.Equals("*") ||
-                        v.Key.Contains("*") &&
-                        message.StartsWith(v.Key.TrimEnd('*')) ||
-                        v.Key.Equals(message)).SelectMany(v => v.Value[step]);
-
-                    if (stepOperations.Count() == 0)
-                    {
-                        return Array.Empty<IPlugin>();
-                    }
-
-                    return stepOperations.ToArray();
-
-                default:
-                    throw new InvalidOperationException($"Unsupported operation type: {step}.");
-            }
+            return stepOperations.SelectMany(v => v.Value).ToList();
         }
     }
 }

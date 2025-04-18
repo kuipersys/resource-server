@@ -10,7 +10,7 @@ namespace Kuiper.Platform.Framework
     using System.Text.Json.Serialization;
 
     using Kuiper.Platform.Framework.Messages;
-    using Kuiper.Platform.Serialization;
+    using Kuiper.Platform.ManagementObjects;
 
     [JsonDerivedType(typeof(PutRequest), nameof(PutRequest))]
     [JsonDerivedType(typeof(GetRequest), nameof(GetRequest))]
@@ -30,7 +30,7 @@ namespace Kuiper.Platform.Framework
             this.Message = message;
         }
 
-        public PlatformRequest(string message, object target)
+        public PlatformRequest(string message, object? target)
         {
             this.Message = message;
             this.InputParameters["target"] = target;
@@ -50,7 +50,7 @@ namespace Kuiper.Platform.Framework
 
         public T GetTarget<T>()
         {
-            if (this.InputParameters.TryGetValue("target", out object target))
+            if (this.InputParameters.TryGetValue("target", out object? target))
             {
                 return (T)target;
             }

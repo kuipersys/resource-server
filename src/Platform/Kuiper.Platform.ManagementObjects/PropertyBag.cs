@@ -4,7 +4,7 @@
 // For licensing inquiries, contact licensing@kuipersys.com
 // </copyright>
 
-namespace Kuiper.Platform.Serialization
+namespace Kuiper.Platform.ManagementObjects
 {
     using System.Collections.Generic;
 

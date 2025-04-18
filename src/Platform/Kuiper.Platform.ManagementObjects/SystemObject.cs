@@ -9,8 +9,6 @@ namespace Kuiper.Platform.ManagementObjects
     using System.ComponentModel.DataAnnotations;
     using System.Text.Json.Serialization;
 
-    using Kuiper.Platform.Serialization;
-
     using NJsonSchema.Annotations;
 
     [JsonSchemaIgnore]

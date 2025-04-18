@@ -10,6 +10,7 @@ namespace Kuiper.ResourceServer.Service.Plugins
     using Kuiper.Platform.Framework.Errors;
     using Kuiper.Platform.Framework.Extensibility;
     using Kuiper.Platform.ManagementObjects;
+    using Kuiper.Platform.ManagementObjects.v1alpha1.Resource;
     using Kuiper.Platform.Runtime.Execution.Attributes;
     using Kuiper.Platform.Serialization.Serialization;
     using Kuiper.ResourceServer.Service.Core;
@@ -22,7 +23,7 @@ namespace Kuiper.ResourceServer.Service.Plugins
         {
             var resourceManager = serviceProvider.GetRequiredService<IResourceManager>();
             var store = serviceProvider.GetRequiredService<IKeyValueStore>();
-            var context = serviceProvider.GetRequiredService<IExecutionContext>();
+            var context = serviceProvider.GetRequiredService<IRuntimeExecutionContext>();
 
             SystemObject systemObject = context.InputParameters["target"].MarshalAs<SystemObject>();
             systemObject.NormalizeResource();
@@ -51,7 +52,7 @@ namespace Kuiper.ResourceServer.Service.Plugins
                 systemObject.Kind = definition.Spec.Names.Kind;
 
                 // Change the resource namespace and regenerate the resourceId if the scope is system
-                if (definition.Spec.Scope == Platform.ManagementObjects.v1alpha1.ResourceScope.System)
+                if (definition.Spec.Scope == ResourceScope.System)
                 {
                     systemObject.Metadata.Namespace = SystemConstants.Resources.GLOBAL_NAMESPACE;
                     descriptor = systemObject.AsResourceDescriptor();

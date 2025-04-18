@@ -47,15 +47,15 @@ namespace Kuiper.Platform.Runtime.Tests.Execution
 
             var serviceCollection = new ServiceCollection();
 
-            serviceCollection.AddSingleton(typeof(IExecutionContext), (provider) =>
+            serviceCollection.AddSingleton(typeof(IRuntimeExecutionContext), (provider) =>
             {
-                return new PlatformRequestExecutionContext("SomeEntity.DoFoo");
+                return new PlatformRuntimeExecutionContext("SomeEntity.DoFoo");
             });
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
             // Act
-            var context = serviceProvider.GetRequiredService<IExecutionContext>();
+            var context = serviceProvider.GetRequiredService<IRuntimeExecutionContext>();
 
             Stopwatch timer = new Stopwatch();
             timer.Start();
@@ -94,15 +94,15 @@ namespace Kuiper.Platform.Runtime.Tests.Execution
 
             var serviceCollection = new ServiceCollection();
 
-            serviceCollection.AddSingleton(typeof(IExecutionContext), (provider) =>
+            serviceCollection.AddSingleton(typeof(IRuntimeExecutionContext), (provider) =>
             {
-                return new PlatformRequestExecutionContext("SomeEntity.DoFoo");
+                return new PlatformRuntimeExecutionContext("SomeEntity.DoFoo");
             });
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
             // Act
-            var context = serviceProvider.GetRequiredService<IExecutionContext>();
+            var context = serviceProvider.GetRequiredService<IRuntimeExecutionContext>();
             await pluginRuntime.ExecuteAsync(serviceProvider);
 
             // Assert
@@ -122,15 +122,15 @@ namespace Kuiper.Platform.Runtime.Tests.Execution
 
             var serviceCollection = new ServiceCollection();
 
-            serviceCollection.AddSingleton(typeof(IExecutionContext), (provider) =>
+            serviceCollection.AddSingleton(typeof(IRuntimeExecutionContext), (provider) =>
             {
-                return new PlatformRequestExecutionContext("SomeEntity.DoFoo.SomeJunk");
+                return new PlatformRuntimeExecutionContext("SomeEntity.DoFoo.SomeJunk");
             });
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
             // Act
-            var context = serviceProvider.GetRequiredService<IExecutionContext>();
+            var context = serviceProvider.GetRequiredService<IRuntimeExecutionContext>();
             await pluginRuntime.ExecuteAsync(serviceProvider);
 
             // Assert

@@ -57,11 +57,32 @@ namespace Kuiper.ResourceServer.Service.Middleware
         private static void ConfigureSystemPlugins(this PluginManager pluginManager, IServiceProvider services)
         {
             // Add system plugins here
-            pluginManager.RegisterPlugin("Get", Platform.Framework.Extensibility.OperationStep.Operation, new GetResourcePlugin());
+
+            pluginManager.RegisterPlugin(
+                "*",
+                Platform.Framework.Extensibility.OperationStep.PreOperation,
+                new ValidationPlugin(
+                    services.GetRequiredService<IResourceManager>(),
+                    services.GetRequiredService<IHttpClientFactory>()),
+                order: 1000);
+
+            pluginManager.RegisterPlugin("Put", Platform.Framework.Extensibility.OperationStep.PreOperation, new MutationPlugin(), order: 100);
             pluginManager.RegisterPlugin("Put", Platform.Framework.Extensibility.OperationStep.Operation, new PutResourcePlugin());
+            // pluginManager.RegisterPlugin("Put", Platform.Framework.Extensibility.OperationStep.PostOperation, __notify__);
+
+            pluginManager.RegisterPlugin("Get", Platform.Framework.Extensibility.OperationStep.Operation, new GetResourcePlugin());
             pluginManager.RegisterPlugin("List", Platform.Framework.Extensibility.OperationStep.Operation, new ListResourcePlugin());
+
+            // Even though the delete operation is going to request the resource to be deleted,
+            // it will need to be an asynchronous operation to allow for the resource to notify consmers of the deletion
             pluginManager.RegisterPlugin("Delete", Platform.Framework.Extensibility.OperationStep.Operation, new DeleteResourcePlugin());
+            // pluginManager.RegisterPlugin("Delete", Platform.Framework.Extensibility.OperationStep.PostOperation, __finalizer__);
+            // pluginManager.RegisterPlugin("Delete", Platform.Framework.Extensibility.OperationStep.PostOperation, __notify__);
+
+            pluginManager.RegisterPlugin("Patch", Platform.Framework.Extensibility.OperationStep.PreOperation, new MutationPlugin(), order: 100);
             pluginManager.RegisterPlugin("Patch", Platform.Framework.Extensibility.OperationStep.Operation, new PatchResourcePlugin());
+            // pluginManager.RegisterPlugin("Patch", Platform.Framework.Extensibility.OperationStep.PostOperation, __notify__);
+
             // pluginManager.RegisterPlugin("Post", Sdk.Extensibility.OperationStep.Operation, new ExecutePlugin());
         }
     }

@@ -27,7 +27,7 @@ namespace Kuiper.Platform.Runtime.Extensibility
                 throw new ArgumentNullException(nameof(serviceProvider));
             }
 
-            var executionContext = serviceProvider.GetRequiredService<IExecutionContext>();
+            var executionContext = serviceProvider.GetRequiredService<IRuntimeExecutionContext>();
 
             foreach (var plugin in this.pluginProvider.ResolvePlugins(executionContext.Step, executionContext.Message))
             {

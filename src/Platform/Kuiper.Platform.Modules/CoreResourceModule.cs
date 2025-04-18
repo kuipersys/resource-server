@@ -12,8 +12,8 @@ namespace Kuiper.Platform.Modules
     using System;
     using System.Threading.Tasks;
 
-    using Kuiper.Platform.Framework;
     using Kuiper.Platform.Framework.Abstractions;
+    using Kuiper.Platform.ManagementObjects.v1alpha1.Resource;
 
     /// <summary>
     /// This class is used to register all of the core resources that NEED to be registered
@@ -23,14 +23,14 @@ namespace Kuiper.Platform.Modules
     /// This includes the following resources:
     /// - <see cref="ResourceDefinition"/>
     /// </summary>
-    public class CoreResourceModule : IPlatformModule
+    internal static class CoreResourceModule
     {
-        public Task RegisterAsync(IResourceDefinitionManagerBuilder builder)
+        public static ResourceDefinition[] GetResourceDefinitions()
         {
-            // This _must_ alwys be the first resource registered
-            builder.RegisterResourceDefinition(CreateSystemResourceDefinition());
-
-            return Task.CompletedTask;
+            return new[]
+            {
+                CreateSystemResourceDefinition(),
+            };
         }
 
         private static ResourceDefinition CreateSystemResourceDefinition()

@@ -8,7 +8,7 @@ namespace Kuiper.Platform.ManagementObjects.UnitTests
 {
     using Kuiper.Platform.Framework;
     using Kuiper.Platform.ManagementObjects;
-    using Kuiper.Platform.ManagementObjects.v1alpha1;
+    using Kuiper.Platform.ManagementObjects.v1alpha1.Resource;
     using Kuiper.Platform.Serialization.Serialization;
 
     using Snapshooter.Xunit;

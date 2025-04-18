@@ -23,10 +23,10 @@ namespace Kuiper.Platform.Runtime.StateMachine
 
         public override int GetHashCode()
         {
-            return 1 +
-                (3 * this.Command.GetHashCode()) +
-                (5 * this.CurrentState.GetHashCode()) +
-                (7 * this.NewState.GetHashCode());
+            return HashCode.Combine(
+                this.Command.GetHashCode(),
+                this.CurrentState.GetHashCode(),
+                this.NewState.GetHashCode());
         }
 
         public override bool Equals(object obj)
