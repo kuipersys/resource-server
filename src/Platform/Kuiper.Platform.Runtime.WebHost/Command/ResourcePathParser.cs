@@ -4,7 +4,7 @@
 // For licensing inquiries, contact licensing@kuipersys.com
 // </copyright>
 
-namespace Kuiper.ResourceServer.Service.Core
+namespace Kuiper.Platform.Runtime.WebHost.Command
 {
     using System;
 

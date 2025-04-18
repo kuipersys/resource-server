@@ -6,7 +6,7 @@
 
 namespace Kuiper.Platform.Runtime.Extensibility
 {
-    using Kuiper.Platform.Framework.Extensibility;
+    using Kuiper.Platform.Runtime.Abstractions.Extensibility;
     using Kuiper.Platform.Runtime.Execution.Attributes;
 
     using Microsoft.Extensions.DependencyInjection;

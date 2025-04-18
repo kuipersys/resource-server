@@ -4,7 +4,7 @@
 // For licensing inquiries, contact licensing@kuipersys.com
 // </copyright>
 
-using Kuiper.Platform.Framework.Extensibility;
+using Kuiper.Platform.Runtime.Abstractions.Extensibility;
 
 namespace Kuiper.Platform.Runtime.Extensibility
 {

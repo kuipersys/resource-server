@@ -7,8 +7,8 @@
 namespace Kuiper.Platform.Runtime
 {
     using Kuiper.Platform.Framework;
-    using Kuiper.Platform.Framework.Errors;
-    using Kuiper.Platform.Framework.Extensibility;
+    using Kuiper.Platform.Runtime.Abstractions.Extensibility;
+    using Kuiper.Platform.Runtime.Errors;
     using Kuiper.Platform.Runtime.Execution;
     using Kuiper.Platform.Runtime.Extensibility;
 
@@ -43,7 +43,7 @@ namespace Kuiper.Platform.Runtime
                 return context.ToPlatformResponse();
             }
             // TODO: Handle exceptions entirely different and only use them for exceptional situations!
-            catch (PlatformException ex)
+            catch (PlatformRuntimeException ex)
             {
                 return new PlatformResponse
                 {
@@ -58,7 +58,7 @@ namespace Kuiper.Platform.Runtime
             }
             catch (Exception ex)
             {
-                throw new PlatformException("Unhandled runtime exception.", ex);
+                throw new PlatformRuntimeException("Unhandled runtime exception.", ex);
             }
         }
 

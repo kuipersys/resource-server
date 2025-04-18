@@ -10,7 +10,7 @@ namespace Kuiper.Platform.Runtime.Tests.Execution
     using System.Diagnostics;
     using System.Threading.Tasks;
 
-    using Kuiper.Platform.Framework.Extensibility;
+    using Kuiper.Platform.Runtime.Abstractions.Extensibility;
     using Kuiper.Platform.Runtime.Execution;
     using Kuiper.Platform.Runtime.Extensibility;
     using Kuiper.Platform.Runtime.Tests.Execution.Plugins;

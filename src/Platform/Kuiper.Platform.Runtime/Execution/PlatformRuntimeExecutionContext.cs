@@ -7,7 +7,7 @@
 namespace Kuiper.Platform.Runtime.Execution
 {
     using Kuiper.Platform.Framework;
-    using Kuiper.Platform.Framework.Extensibility;
+    using Kuiper.Platform.Runtime.Abstractions.Extensibility;
 
     public sealed class PlatformRuntimeExecutionContext : IInternalRuntimeExecutionContext
     {

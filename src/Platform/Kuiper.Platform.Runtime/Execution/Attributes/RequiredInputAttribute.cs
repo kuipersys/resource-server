@@ -9,7 +9,7 @@ namespace Kuiper.Platform.Runtime.Execution.Attributes
     using System;
 
     using Kuiper.Platform.Extensions.Contracts;
-    using Kuiper.Platform.Framework.Extensibility;
+    using Kuiper.Platform.Runtime.Abstractions.Extensibility;
 
     public class RequiredInputAttribute : PluginAssertionAttribute
     {

@@ -4,7 +4,7 @@
 // For licensing inquiries, contact licensing@kuipersys.com
 // </copyright>
 
-namespace Kuiper.Platform.Framework.Extensibility
+namespace Kuiper.Platform.Runtime.Abstractions.Extensibility
 {
     public enum OperationStep : ushort
     {

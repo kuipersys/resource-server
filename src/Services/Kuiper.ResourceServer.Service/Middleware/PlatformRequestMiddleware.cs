@@ -7,12 +7,12 @@
 namespace Kuiper.ResourceServer.Service.Middleware
 {
     using Kuiper.Platform.Framework;
-    using Kuiper.Platform.Framework.Errors;
     using Kuiper.Platform.Framework.Messages;
     using Kuiper.Platform.ManagementObjects;
     using Kuiper.Platform.Runtime;
+    using Kuiper.Platform.Runtime.Errors;
+    using Kuiper.Platform.Runtime.WebHost.Command;
     using Kuiper.Platform.Serialization.Serialization;
-    using Kuiper.ResourceServer.Service.Core;
 
     public class PlatformRequestMiddleware : IMiddleware
     {
@@ -38,14 +38,14 @@ namespace Kuiper.ResourceServer.Service.Middleware
                     await this.ExecuteAsync(context);
                     return;
                 }
-                else if (this.supportedVerbs.Contains(context.Request.Method) && 
+                else if (this.supportedVerbs.Contains(context.Request.Method) &&
                     context.Request.Path.StartsWithSegments("/api", StringComparison.InvariantCultureIgnoreCase, out PathString remaining))
                 {
                     await this.ExecuteVerbAsync(context, remaining);
                     return;
                 }
             }
-            catch (PlatformException ex)
+            catch (PlatformRuntimeException ex)
             {
                 if (context.Response.HasStarted)
                 {

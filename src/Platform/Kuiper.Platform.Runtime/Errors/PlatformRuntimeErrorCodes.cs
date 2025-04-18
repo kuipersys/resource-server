@@ -4,34 +4,12 @@
 // For licensing inquiries, contact licensing@kuipersys.com
 // </copyright>
 
-namespace Kuiper.Platform.Framework.Errors
+namespace Kuiper.Platform.Runtime.Errors
 {
     using System.Net;
 
-    public static class PlatformErrorCodes
+    public static class PlatformRuntimeErrorCodes
     {
-        public static IReadOnlyDictionary<string, int> HttpResponseCodes { get; } = new Dictionary<string, int>
-        {
-            { InvalidResourceKind, (int)HttpStatusCode.BadRequest },
-            { ResourceNotFound, (int)HttpStatusCode.NotFound },
-            { ValidationError, (int)HttpStatusCode.BadRequest },
-            { BadRequest, (int)HttpStatusCode.BadRequest },
-            { Unauthorized, (int)HttpStatusCode.Unauthorized },
-            { Forbidden, (int)HttpStatusCode.Forbidden },
-            { InternalServerError, (int)HttpStatusCode.InternalServerError }
-        };
-
-        public static IReadOnlyDictionary<string, string> ErrorMessages { get; } = new Dictionary<string, string>
-        {
-            { InvalidResourceKind, "Invalid resource kind." },
-            { ResourceNotFound, "Resource not found." },
-            { ValidationError, "Validation error." },
-            { BadRequest, "Bad request." },
-            { InternalServerError, "Internal server error." },
-            { Unauthorized, "Unauthorized." },
-            { Forbidden, "Forbidden." }
-        };
-
         public const string BadRequest = "BAD_REQUEST";
 
         public const string InternalServerError = "INTERNAL_SERVER_ERROR";
@@ -44,7 +22,28 @@ namespace Kuiper.Platform.Framework.Errors
 
         public const string ResourceNotFound = "RESOURCE_NOT_FOUND";
 
-        [Obsolete("I need to allow more data to be passed into this or possibly add a specific exception for these types?")]
         public const string ValidationError = "VALIDATION_ERROR";
+
+        public static IReadOnlyDictionary<string, int> HttpResponseCodes { get; } = new Dictionary<string, int>
+        {
+            { InvalidResourceKind, (int)HttpStatusCode.BadRequest },
+            { ResourceNotFound, (int)HttpStatusCode.NotFound },
+            { ValidationError, (int)HttpStatusCode.BadRequest },
+            { BadRequest, (int)HttpStatusCode.BadRequest },
+            { Unauthorized, (int)HttpStatusCode.Unauthorized },
+            { Forbidden, (int)HttpStatusCode.Forbidden },
+            { InternalServerError, (int)HttpStatusCode.InternalServerError },
+        };
+
+        public static IReadOnlyDictionary<string, string> ErrorMessages { get; } = new Dictionary<string, string>
+        {
+            { InvalidResourceKind, "Invalid resource kind." },
+            { ResourceNotFound, "Resource not found." },
+            { ValidationError, "Validation error." },
+            { BadRequest, "Bad request." },
+            { InternalServerError, "Internal server error." },
+            { Unauthorized, "Unauthorized." },
+            { Forbidden, "Forbidden." },
+        };
     }
 }

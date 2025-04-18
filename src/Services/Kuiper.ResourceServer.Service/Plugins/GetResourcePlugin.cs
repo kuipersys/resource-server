@@ -6,9 +6,9 @@
 
 namespace Kuiper.ResourceServer.Service.Plugins
 {
-    using Kuiper.Platform.Framework.Errors;
-    using Kuiper.Platform.Framework.Extensibility;
     using Kuiper.Platform.ManagementObjects;
+    using Kuiper.Platform.Runtime.Abstractions.Extensibility;
+    using Kuiper.Platform.Runtime.Errors;
     using Kuiper.Platform.Runtime.Execution.Attributes;
     using Kuiper.Platform.Serialization.Serialization;
     using Kuiper.ServiceInfra.Abstractions.Persistence;
@@ -33,14 +33,14 @@ namespace Kuiper.ResourceServer.Service.Plugins
 
                 if (data == null)
                 {
-                    throw new PlatformException(PlatformErrorCodes.ResourceNotFound);
+                    throw new PlatformRuntimeException(PlatformRuntimeErrorCodes.ResourceNotFound);
                 }
 
                 context.OutputParameters["result"] = data.JsonBytesToObject<SystemObject>();
             }
             catch (KeyNotFoundException ex)
             {
-                throw new PlatformException(PlatformErrorCodes.ResourceNotFound, ex);
+                throw new PlatformRuntimeException(PlatformRuntimeErrorCodes.ResourceNotFound, ex);
             }
         }
     }

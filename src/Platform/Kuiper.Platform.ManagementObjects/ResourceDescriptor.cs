@@ -10,8 +10,6 @@ namespace Kuiper.Platform.ManagementObjects
     using System.Collections.Generic;
     using System.Text.Json.Serialization;
 
-    using Kuiper.Platform.Framework.Abstractions;
-
     [JsonDerivedType(typeof(ResourceDescriptor), nameof(ResourceDescriptor))]
     public class ResourceDescriptor
     {

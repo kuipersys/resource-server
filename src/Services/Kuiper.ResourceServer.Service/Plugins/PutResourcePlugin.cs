@@ -6,11 +6,10 @@
 
 namespace Kuiper.ResourceServer.Service.Plugins
 {
-    using Kuiper.Platform.Framework.Abstractions;
-    using Kuiper.Platform.Framework.Errors;
-    using Kuiper.Platform.Framework.Extensibility;
     using Kuiper.Platform.ManagementObjects;
     using Kuiper.Platform.ManagementObjects.v1alpha1.Resource;
+    using Kuiper.Platform.Runtime.Abstractions.Extensibility;
+    using Kuiper.Platform.Runtime.Errors;
     using Kuiper.Platform.Runtime.Execution.Attributes;
     using Kuiper.Platform.Serialization.Serialization;
     using Kuiper.ResourceServer.Service.Core;
@@ -30,17 +29,17 @@ namespace Kuiper.ResourceServer.Service.Plugins
 
             if (string.IsNullOrWhiteSpace(systemObject.Kind))
             {
-                throw new PlatformException("Kind Is Missing", PlatformErrorCodes.ValidationError);
+                throw new PlatformRuntimeException("Kind Is Missing", PlatformRuntimeErrorCodes.ValidationError);
             }
 
             if (string.IsNullOrWhiteSpace(systemObject.ApiVersion))
             {
-                throw new PlatformException("Api Version Is Missing", PlatformErrorCodes.ValidationError);
+                throw new PlatformRuntimeException("Api Version Is Missing", PlatformRuntimeErrorCodes.ValidationError);
             }
 
             if (string.IsNullOrWhiteSpace(systemObject.Metadata.Name))
             {
-                throw new PlatformException("Name Is Missing", PlatformErrorCodes.ValidationError);
+                throw new PlatformRuntimeException("Name Is Missing", PlatformRuntimeErrorCodes.ValidationError);
             }
 
             var descriptor = systemObject.AsResourceDescriptor();
@@ -66,7 +65,7 @@ namespace Kuiper.ResourceServer.Service.Plugins
             }
             catch (KeyNotFoundException ex)
             {
-                throw new PlatformException(PlatformErrorCodes.InternalServerError, ex);
+                throw new PlatformRuntimeException(PlatformRuntimeErrorCodes.InternalServerError, ex);
             }
         }
     }

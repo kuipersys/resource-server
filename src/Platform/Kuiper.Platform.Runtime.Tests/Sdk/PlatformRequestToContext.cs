@@ -6,9 +6,9 @@
 
 namespace Kuiper.Platform.Runtime.Tests.Sdk
 {
-    using Kuiper.Platform.Framework.Extensibility;
     using Kuiper.Platform.Framework.Messages;
     using Kuiper.Platform.ManagementObjects;
+    using Kuiper.Platform.Runtime.Abstractions.Extensibility;
     using Kuiper.Platform.Runtime.Execution;
     using Kuiper.Platform.Runtime.Extensibility;
     using Kuiper.Platform.Runtime.Tests.Execution.Plugins;

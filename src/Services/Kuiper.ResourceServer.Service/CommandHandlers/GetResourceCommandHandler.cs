@@ -6,10 +6,9 @@
 
 namespace Kuiper.ResourceServer.Service.CommandHandlers
 {
-    using Kuiper.Platform.Framework.Errors;
-    using Kuiper.Platform.ManagementObjects;
     using Kuiper.Platform.Runtime.Abstractions.Command;
     using Kuiper.Platform.Runtime.Command;
+    using Kuiper.Platform.Runtime.Errors;
     using Kuiper.ServiceInfra.Abstractions.Persistence;
 
     using Microsoft.Extensions.DependencyInjection;
@@ -29,7 +28,7 @@ namespace Kuiper.ResourceServer.Service.CommandHandlers
 
                 if (data == null)
                 {
-                    throw new PlatformException(PlatformErrorCodes.ResourceNotFound);
+                    throw new PlatformRuntimeException(PlatformRuntimeErrorCodes.ResourceNotFound);
                 }
 
                 return CommandResult.Success(data);

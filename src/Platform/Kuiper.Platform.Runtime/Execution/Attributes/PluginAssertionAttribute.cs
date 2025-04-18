@@ -12,7 +12,7 @@ namespace Kuiper.Platform.Runtime.Execution.Attributes
     using System.Linq;
     using System.Threading.Tasks;
 
-    using Kuiper.Platform.Framework.Extensibility;
+    using Kuiper.Platform.Runtime.Abstractions.Extensibility;
 
     /// <summary>
     /// An abstraction used for pipeline step execution assertions during execution.

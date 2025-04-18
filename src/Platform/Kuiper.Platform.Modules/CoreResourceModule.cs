@@ -12,7 +12,6 @@ namespace Kuiper.Platform.Modules
     using System;
     using System.Threading.Tasks;
 
-    using Kuiper.Platform.Framework.Abstractions;
     using Kuiper.Platform.ManagementObjects.v1alpha1.Resource;
 
     /// <summary>

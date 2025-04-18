@@ -4,8 +4,12 @@
 // For licensing inquiries, contact licensing@kuipersys.com
 // </copyright>
 
-namespace Kuiper.Platform.Framework.Extensibility
+namespace Kuiper.Platform.Runtime.Abstractions.Extensibility
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading;
+
     public interface IRuntimeExecutionContext
     {
         /// <summary>

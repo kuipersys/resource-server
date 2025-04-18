@@ -6,8 +6,6 @@
 
 using System.Linq;
 
-using Kuiper.Platform.Framework.Abstractions;
-
 namespace Kuiper.Platform.ManagementObjects
 {
     public static class ResourceDescriptorExtensions

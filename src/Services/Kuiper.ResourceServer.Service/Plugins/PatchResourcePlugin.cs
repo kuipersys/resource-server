@@ -6,7 +6,7 @@
 
 namespace Kuiper.ResourceServer.Service.Plugins
 {
-    using Kuiper.Platform.Framework.Extensibility;
+    using Kuiper.Platform.Runtime.Abstractions.Extensibility;
 
     internal class PatchResourcePlugin : IPlugin
     {

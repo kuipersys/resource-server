@@ -8,7 +8,6 @@ namespace Kuiper.ResourceServer.Service.Core
 {
     using System.Threading;
 
-    using Kuiper.Platform.Framework.Abstractions;
     using Kuiper.Platform.ManagementObjects;
     using Kuiper.Platform.ManagementObjects.v1alpha1.Resource;
     using Kuiper.Platform.Modules;

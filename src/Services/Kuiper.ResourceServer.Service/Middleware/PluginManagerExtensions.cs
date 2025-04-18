@@ -7,6 +7,7 @@
 namespace Kuiper.ResourceServer.Service.Middleware
 {
     using Kuiper.Platform.Runtime;
+    using Kuiper.Platform.Runtime.Abstractions.Extensibility;
     using Kuiper.Platform.Runtime.Extensibility;
     using Kuiper.ResourceServer.Service.Core;
     using Kuiper.ResourceServer.Service.Plugins;
@@ -60,27 +61,27 @@ namespace Kuiper.ResourceServer.Service.Middleware
 
             pluginManager.RegisterPlugin(
                 "*",
-                Platform.Framework.Extensibility.OperationStep.PreOperation,
+                OperationStep.PreOperation,
                 new ValidationPlugin(
                     services.GetRequiredService<IResourceManager>(),
                     services.GetRequiredService<IHttpClientFactory>()),
                 order: 1000);
 
-            pluginManager.RegisterPlugin("Put", Platform.Framework.Extensibility.OperationStep.PreOperation, new MutationPlugin(), order: 100);
-            pluginManager.RegisterPlugin("Put", Platform.Framework.Extensibility.OperationStep.Operation, new PutResourcePlugin());
+            pluginManager.RegisterPlugin("Put", OperationStep.PreOperation, new MutationPlugin(), order: 100);
+            pluginManager.RegisterPlugin("Put", OperationStep.Operation, new PutResourcePlugin());
             // pluginManager.RegisterPlugin("Put", Platform.Framework.Extensibility.OperationStep.PostOperation, __notify__);
 
-            pluginManager.RegisterPlugin("Get", Platform.Framework.Extensibility.OperationStep.Operation, new GetResourcePlugin());
-            pluginManager.RegisterPlugin("List", Platform.Framework.Extensibility.OperationStep.Operation, new ListResourcePlugin());
+            pluginManager.RegisterPlugin("Get", OperationStep.Operation, new GetResourcePlugin());
+            pluginManager.RegisterPlugin("List", OperationStep.Operation, new ListResourcePlugin());
 
             // Even though the delete operation is going to request the resource to be deleted,
             // it will need to be an asynchronous operation to allow for the resource to notify consmers of the deletion
-            pluginManager.RegisterPlugin("Delete", Platform.Framework.Extensibility.OperationStep.Operation, new DeleteResourcePlugin());
+            pluginManager.RegisterPlugin("Delete", OperationStep.Operation, new DeleteResourcePlugin());
             // pluginManager.RegisterPlugin("Delete", Platform.Framework.Extensibility.OperationStep.PostOperation, __finalizer__);
             // pluginManager.RegisterPlugin("Delete", Platform.Framework.Extensibility.OperationStep.PostOperation, __notify__);
 
-            pluginManager.RegisterPlugin("Patch", Platform.Framework.Extensibility.OperationStep.PreOperation, new MutationPlugin(), order: 100);
-            pluginManager.RegisterPlugin("Patch", Platform.Framework.Extensibility.OperationStep.Operation, new PatchResourcePlugin());
+            pluginManager.RegisterPlugin("Patch", OperationStep.PreOperation, new MutationPlugin(), order: 100);
+            pluginManager.RegisterPlugin("Patch", OperationStep.Operation, new PatchResourcePlugin());
             // pluginManager.RegisterPlugin("Patch", Platform.Framework.Extensibility.OperationStep.PostOperation, __notify__);
 
             // pluginManager.RegisterPlugin("Post", Sdk.Extensibility.OperationStep.Operation, new ExecutePlugin());

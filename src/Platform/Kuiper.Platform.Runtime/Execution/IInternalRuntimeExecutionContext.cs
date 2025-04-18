@@ -9,7 +9,7 @@ namespace Kuiper.Platform.Runtime.Execution
     using System.Text.Json.Serialization;
 
     using Kuiper.Platform.Framework;
-    using Kuiper.Platform.Framework.Extensibility;
+    using Kuiper.Platform.Runtime.Abstractions.Extensibility;
 
     [JsonDerivedType(typeof(PlatformRuntimeExecutionContext), nameof(PlatformRuntimeExecutionContext))]
     public interface IInternalRuntimeExecutionContext : IRuntimeExecutionContext

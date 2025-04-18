@@ -14,7 +14,6 @@ namespace Kuiper.Platform.Runtime.WebHost.Command
     using Kuiper.Platform.Runtime.Abstractions.Command;
     using Kuiper.Platform.Runtime.Command;
     using Kuiper.Platform.Serialization.Serialization;
-    using Kuiper.ResourceServer.Service.Core;
 
     using Microsoft.AspNetCore.Http;
 

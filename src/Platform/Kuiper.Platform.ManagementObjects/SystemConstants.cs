@@ -4,7 +4,7 @@
 // For licensing inquiries, contact licensing@kuipersys.com
 // </copyright>
 
-namespace Kuiper.Platform.Framework.Abstractions
+namespace Kuiper.Platform.ManagementObjects
 {
     public static class SystemConstants
     {

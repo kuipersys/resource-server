@@ -4,17 +4,17 @@
 // For licensing inquiries, contact licensing@kuipersys.com
 // </copyright>
 
-using Kuiper.Platform.Framework.Errors;
-using Kuiper.Platform.Framework.Extensibility;
-using Kuiper.Platform.ManagementObjects;
-using Kuiper.Platform.ManagementObjects.v1alpha1.Resource;
-using Kuiper.Platform.Serialization.Serialization;
-using Kuiper.ResourceServer.Service.Core;
-
-using Microsoft.CodeAnalysis;
-
 namespace Kuiper.ResourceServer.Service.Plugins
 {
+    using Kuiper.Platform.ManagementObjects;
+    using Kuiper.Platform.ManagementObjects.v1alpha1.Resource;
+    using Kuiper.Platform.Runtime.Abstractions.Extensibility;
+    using Kuiper.Platform.Runtime.Errors;
+    using Kuiper.Platform.Serialization.Serialization;
+    using Kuiper.ResourceServer.Service.Core;
+
+    using Microsoft.CodeAnalysis;
+
     internal class ValidationPlugin : IPlugin
     {
         private readonly IResourceManager resourceManager;
@@ -58,9 +58,9 @@ namespace Kuiper.ResourceServer.Service.Plugins
             if (errors.Count > 0)
             {
                 AggregateException validationException = new AggregateException(
-                    errors.Select(e => new PlatformException(
+                    errors.Select(e => new PlatformRuntimeException(
                         $"Validation Error: {e.ToString()}",
-                        PlatformErrorCodes.ValidationError)));
+                        PlatformRuntimeErrorCodes.ValidationError)));
 
                 throw validationException;
             }
@@ -92,9 +92,9 @@ namespace Kuiper.ResourceServer.Service.Plugins
 
                 if (!allowSystemModification && resourceDescriptor.Name.StartsWith("$"))
                 {
-                    throw new PlatformException(
+                    throw new PlatformRuntimeException(
                         "System resources cannot be modified",
-                        PlatformErrorCodes.Forbidden);
+                        PlatformRuntimeErrorCodes.Forbidden);
                 }
 
                 await this.ValidateAsync(resourceDescriptor, throwOnNull: true);
@@ -107,9 +107,9 @@ namespace Kuiper.ResourceServer.Service.Plugins
 
                 if (!allowSystemModification && resourceDescriptor.Name.StartsWith("$"))
                 {
-                    throw new PlatformException(
+                    throw new PlatformRuntimeException(
                         "System resources cannot be modified",
-                        PlatformErrorCodes.Forbidden);
+                        PlatformRuntimeErrorCodes.Forbidden);
                 }
 
                 await this.ValidateAsync(resourceDescriptor, throwOnNull: true);
@@ -125,17 +125,17 @@ namespace Kuiper.ResourceServer.Service.Plugins
                     return;
                 }
 
-                throw new PlatformException(
+                throw new PlatformRuntimeException(
                     "Invalid Resource Descriptor",
-                    PlatformErrorCodes.InvalidResourceKind,
+                    PlatformRuntimeErrorCodes.InvalidResourceKind,
                     new ArgumentNullException($"{nameof(ResourceDescriptor)}"));
             }
 
             if (string.IsNullOrWhiteSpace(resourceDescriptor.Kind))
             {
-                throw new PlatformException(
+                throw new PlatformRuntimeException(
                     "Invalid Resource Descriptor Kind",
-                    PlatformErrorCodes.InvalidResourceKind,
+                    PlatformRuntimeErrorCodes.InvalidResourceKind,
                     new ArgumentNullException($"{nameof(ResourceDescriptor)}.{nameof(ResourceDescriptor.Kind)}"));
             }
 
@@ -145,9 +145,9 @@ namespace Kuiper.ResourceServer.Service.Plugins
 
             if (resourceDefinition == null)
             {
-                throw new PlatformException(
+                throw new PlatformRuntimeException(
                     $"Invalid Resource Kind: {resourceDescriptor.ApiVersion}/{resourceDescriptor.Kind}",
-                    PlatformErrorCodes.InvalidResourceKind);
+                    PlatformRuntimeErrorCodes.InvalidResourceKind);
             }
 
             await Task.CompletedTask;
@@ -157,9 +157,9 @@ namespace Kuiper.ResourceServer.Service.Plugins
         {
             if (string.IsNullOrWhiteSpace(resource.Kind))
             {
-                throw new PlatformException(
+                throw new PlatformRuntimeException(
                     "Invalid System Object Kind",
-                    PlatformErrorCodes.InvalidResourceKind,
+                    PlatformRuntimeErrorCodes.InvalidResourceKind,
                     new ArgumentNullException($"{nameof(SystemObject)}.{nameof(SystemObject.Kind)}"));
             }
 
@@ -176,9 +176,9 @@ namespace Kuiper.ResourceServer.Service.Plugins
 
             if (resourceVersion == null)
             {
-                throw new PlatformException(
+                throw new PlatformRuntimeException(
                     $"Invalid Resource Kind: {resource.ApiVersion}/{resource.Kind}",
-                    PlatformErrorCodes.InvalidResourceKind);
+                    PlatformRuntimeErrorCodes.InvalidResourceKind);
             }
 
             string resourceJson = resource.ObjectToJson();

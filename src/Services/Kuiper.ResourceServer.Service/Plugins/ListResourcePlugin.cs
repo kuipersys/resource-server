@@ -6,9 +6,9 @@
 
 namespace Kuiper.ResourceServer.Service.Plugins
 {
-    using Kuiper.Platform.Framework.Errors;
-    using Kuiper.Platform.Framework.Extensibility;
     using Kuiper.Platform.ManagementObjects;
+    using Kuiper.Platform.Runtime.Abstractions.Extensibility;
+    using Kuiper.Platform.Runtime.Errors;
     using Kuiper.Platform.Runtime.Execution.Attributes;
     using Kuiper.Platform.Serialization.Serialization;
     using Kuiper.ServiceInfra.Abstractions.Persistence;
@@ -27,7 +27,7 @@ namespace Kuiper.ResourceServer.Service.Plugins
             if (!string.IsNullOrWhiteSpace(resourceDescriptor.Name))
             {
                 // context.Response = new PlatformCommandResponse(400, "Resource Name Is Missing");
-                throw new PlatformException("Resource Name Is Not Valid For List");
+                throw new PlatformRuntimeException("Resource Name Is Not Valid For List");
             }
 
             try

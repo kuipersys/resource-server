@@ -10,7 +10,7 @@ namespace Kuiper.Platform.Runtime.Extensibility
     using System.Collections.Generic;
     using System.Linq;
 
-    using Kuiper.Platform.Framework.Extensibility;
+    using Kuiper.Platform.Runtime.Abstractions.Extensibility;
 
     /// <summary>
     /// Defines the <see cref="PluginManager" />
