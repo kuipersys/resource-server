@@ -4,6 +4,8 @@ is_global = true
 # NOTE: No section headers for configuration entries
 
 #### .NET Coding Conventions ####
+# dotnet_diagnostic.IDE0210.severity = error   # For outside_namespace
+csharp_using_directive_placement = inside_namespace:error
 
 # this. and Me. preferences
 dotnet_style_qualification_for_method = true:error

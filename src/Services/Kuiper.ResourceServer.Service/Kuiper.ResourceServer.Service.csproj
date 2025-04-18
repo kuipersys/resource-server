@@ -15,12 +15,11 @@
     <PackageReference Include="Kuiper.ServiceInfra.Abstractions" />
     <PackageReference Include="Kuiper.ServiceInfra.Persistence" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
-    <PackageReference Include="StyleCop.Analyzers" PrivateAssets="All" Condition="'$(SkipAnalysis)'!='true'" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Kuiper.Platform.Runtime.Abstractions\Kuiper.Platform.Runtime.Abstractions.csproj" />
-    <ProjectReference Include="..\..\..\Kuiper.Platform.Runtime.WebHost\Kuiper.Platform.Runtime.WebHost.csproj" />
+    <ProjectReference Include="..\..\Platform\Kuiper.Platform.Runtime.Abstractions\Kuiper.Platform.Runtime.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Platform\Kuiper.Platform.Runtime.WebHost\Kuiper.Platform.Runtime.WebHost.csproj" />
     <ProjectReference Include="..\..\Platform\Kuiper.Platform.ManagementObjects\Kuiper.Platform.ManagementObjects.csproj" />
     <ProjectReference Include="..\..\Platform\Kuiper.Platform.Modules\Kuiper.Platform.Modules.csproj" />
     <ProjectReference Include="..\..\Platform\Kuiper.Platform.Runtime\Kuiper.Platform.Runtime.csproj" />

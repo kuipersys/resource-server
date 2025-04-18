@@ -17,7 +17,6 @@
     <PackageReference Include="Snapshooter.Xunit" />
     <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio" />
-    <PackageReference Include="StyleCop.Analyzers" PrivateAssets="All" Condition="'$(SkipAnalysis)'!='true'" />
   </ItemGroup>
 
   <ItemGroup>

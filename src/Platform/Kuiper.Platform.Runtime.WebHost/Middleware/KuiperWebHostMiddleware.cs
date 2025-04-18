@@ -1,16 +1,19 @@
-﻿namespace Kuiper.Platform.Runtime.WebHost.Middleware
+﻿// <copyright file="KuiperWebHostMiddleware.cs" company="Kuiper Microsystems, LLC">
+// © Kuiper Microsystems, LLC. All rights reserved.
+// Unauthorized copying or use of this file, via any medium, is strictly prohibited.
+// For licensing inquiries, contact licensing@kuipersys.com
+// </copyright>
+
+namespace Kuiper.Platform.Runtime.WebHost.Middleware
 {
-    using System.Text;
     using System.Threading.Tasks;
 
     using Kuiper.Platform.Framework;
-    using Kuiper.Platform.Framework.Messages;
     using Kuiper.Platform.Runtime.Abstractions.Command;
     using Kuiper.Platform.Runtime.WebHost.Command;
     using Kuiper.Platform.Serialization.Serialization;
 
     using Microsoft.AspNetCore.Http;
-    using Newtonsoft.Json;
 
     internal class KuiperWebHostMiddleware : IMiddleware
     {
@@ -25,14 +28,14 @@
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            ICommandContext? commandContext = await httpContextCommandFactory.CreateAsync(context);
+            ICommandContext? commandContext = await this.httpContextCommandFactory.CreateAsync(context);
 
             if (commandContext == null)
             {
                 return;
             }
 
-            ICommandResult result = await commandDispatcher.DispatchAsync(commandContext);
+            ICommandResult result = await this.commandDispatcher.DispatchAsync(commandContext);
             await WriteAsync(context, result);
         }
 

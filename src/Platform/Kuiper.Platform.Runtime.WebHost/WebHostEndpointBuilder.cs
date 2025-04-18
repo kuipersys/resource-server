@@ -1,11 +1,17 @@
-﻿using Kuiper.Platform.Runtime.WebHost.Middleware;
-
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
+﻿// <copyright file="WebHostEndpointBuilder.cs" company="Kuiper Microsystems, LLC">
+// © Kuiper Microsystems, LLC. All rights reserved.
+// Unauthorized copying or use of this file, via any medium, is strictly prohibited.
+// For licensing inquiries, contact licensing@kuipersys.com
+// </copyright>
 
 namespace Kuiper.Platform.Runtime.WebHost
 {
+    using Kuiper.Platform.Runtime.WebHost.Middleware;
+
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Routing;
+
     internal static class WebHostEndpointBuilder
     {
         public static IEndpointRouteBuilder MapKuiperWebHostRuntimeEndpoints(this IEndpointRouteBuilder endpoints)

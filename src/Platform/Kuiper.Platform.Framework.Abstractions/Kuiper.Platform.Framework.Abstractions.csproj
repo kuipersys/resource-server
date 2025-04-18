@@ -10,7 +10,6 @@
   <ItemGroup>
     <PackageReference Include="System.Text.Json" />
     <PackageReference Include="System.ComponentModel.Annotations" />
-    <PackageReference Include="StyleCop.Analyzers" PrivateAssets="All" Condition="'$(SkipAnalysis)'!='true'" />
   </ItemGroup>
 
 </Project>

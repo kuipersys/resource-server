@@ -1,0 +1,16 @@
+<Project>
+    <PropertyGroup>
+        <CodeAnalysisTreatWarningsAsErrors>false</CodeAnalysisTreatWarningsAsErrors>
+        <AnalysisLevel>latest</AnalysisLevel>
+        <_SkipUpgradeNetAnalyzersNuGetWarning>true</_SkipUpgradeNetAnalyzersNuGetWarning>
+        <AnalysisMode>Recommended</AnalysisMode>
+        <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    </PropertyGroup>
+    <ItemGroup>
+        <GlobalPackageReference Include="StyleCop.Analyzers"
+            Condition="'$(SkipAnalysis)'!='true'">
+            <PrivateAssets>all</PrivateAssets>
+            <Version>1.1.118</Version>
+        </GlobalPackageReference>
+    </ItemGroup>
+</Project>

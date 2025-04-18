@@ -1,4 +1,10 @@
-﻿namespace Kuiper.Platform.Runtime.Abstractions.Command
+﻿// <copyright file="CommandParser.cs" company="Kuiper Microsystems, LLC">
+// © Kuiper Microsystems, LLC. All rights reserved.
+// Unauthorized copying or use of this file, via any medium, is strictly prohibited.
+// For licensing inquiries, contact licensing@kuipersys.com
+// </copyright>
+
+namespace Kuiper.Platform.Runtime.Abstractions.Command
 {
     using System;
 
@@ -7,11 +13,13 @@
         public static ParsedCommand Parse(string[] args)
         {
             if (args == null || args.Length == 0)
+            {
                 throw new ArgumentException("No command provided.");
+            }
 
             var result = new ParsedCommand
             {
-                CommandName = args[0]
+                CommandName = args[0],
             };
 
             string? lastFlag = null;
@@ -20,13 +28,13 @@
             {
                 var token = args[i];
 
-                if (token.StartsWith("--"))
+                if (token.StartsWith("--", StringComparison.OrdinalIgnoreCase))
                 {
                     // It's a named argument or flag
                     lastFlag = token[2..]; // remove the --
 
                     // Peek to see if next token is a value or another flag
-                    if (i + 1 < args.Length && !args[i + 1].StartsWith("--"))
+                    if (i + 1 < args.Length && !args[i + 1].StartsWith("--", StringComparison.OrdinalIgnoreCase))
                     {
                         result.NamedArguments[lastFlag] = args[i + 1];
                         i++; // consume the value

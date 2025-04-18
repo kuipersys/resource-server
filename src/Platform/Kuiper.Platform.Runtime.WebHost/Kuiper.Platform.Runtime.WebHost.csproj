@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Kuiper.Platform.Runtime.Abstractions\Kuiper.Platform.Runtime.Abstractions.csproj" />
-    <ProjectReference Include="..\src\Platform\Kuiper.Platform.Runtime\Kuiper.Platform.Runtime.csproj" />
+    <ProjectReference Include="..\Kuiper.Platform.Runtime\Kuiper.Platform.Runtime.csproj" />
   </ItemGroup>
   
 </Project>

@@ -1,4 +1,10 @@
-﻿namespace Kuiper.Platform.Runtime.Abstractions.Command
+﻿// <copyright file="CommandAttribute.cs" company="Kuiper Microsystems, LLC">
+// © Kuiper Microsystems, LLC. All rights reserved.
+// Unauthorized copying or use of this file, via any medium, is strictly prohibited.
+// For licensing inquiries, contact licensing@kuipersys.com
+// </copyright>
+
+namespace Kuiper.Platform.Runtime.Abstractions.Command
 {
     using System;
     using System.Text;
@@ -21,9 +27,9 @@
 
         public CommandAttribute(string verb, string? description = null, string? module = null, string? resource = null, bool disable = false)
         {
-            Verb = verb.ToLowerInvariant();
-            Description = description;
-            Disable = disable;
+            this.Verb = verb.ToLowerInvariant();
+            this.Description = description;
+            this.Disable = disable;
 
             if (string.IsNullOrWhiteSpace(verb) ||
                 !IsValidCommandName(verb))
@@ -41,10 +47,10 @@
                 throw new Exception("Resource Kinds can only contain letters and numbers.");
             }
 
-            Module = (module ?? string.Empty).ToLowerInvariant();
-            Resource = (resource ?? string.Empty).ToLowerInvariant();
+            this.Module = (module ?? string.Empty).ToLowerInvariant();
+            this.Resource = (resource ?? string.Empty).ToLowerInvariant();
 
-            CommandId = this.AsCommandIdentifier();
+            this.CommandId = this.AsCommandIdentifier();
         }
 
         public static bool IsValidCommandName(string commandName)
@@ -54,19 +60,19 @@
         {
             StringBuilder sb = new StringBuilder();
 
-            if (!string.IsNullOrWhiteSpace(Resource))
+            if (!string.IsNullOrWhiteSpace(this.Resource))
             {
-                sb.Append(Resource);
+                sb.Append(this.Resource);
                 sb.Append('.');
             }
 
-            if (!string.IsNullOrWhiteSpace(Module))
+            if (!string.IsNullOrWhiteSpace(this.Module))
             {
-                sb.Append(Module);
+                sb.Append(this.Module);
                 sb.Append('.');
             }
 
-            sb.Append(Verb);
+            sb.Append(this.Verb);
 
             return sb.ToString();
         }
