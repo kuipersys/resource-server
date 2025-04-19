@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Kuiper.Platform.Framework.Abstractions\Kuiper.Platform.Framework.Abstractions.csproj" />
     <ProjectReference Include="..\Kuiper.Platform.Framework\Kuiper.Platform.Framework.csproj" />
     <ProjectReference Include="..\Kuiper.Platform.ManagementObjects\Kuiper.Platform.ManagementObjects.csproj" />
   </ItemGroup>

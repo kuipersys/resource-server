@@ -28,7 +28,7 @@ namespace Kuiper.Platform.Serialization.Serialization.Json
             return (JsonConverter)Activator.CreateInstance(converterType)!;
         }
 
-        private class OmitEmptyDictionaryConverter<TKey, TValue> : JsonConverter<Dictionary<TKey, TValue>> where TKey : notnull
+        private sealed class OmitEmptyDictionaryConverter<TKey, TValue> : JsonConverter<Dictionary<TKey, TValue>> where TKey : notnull
         {
             public override Dictionary<TKey, TValue> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
                 => JsonSerializer.Deserialize<Dictionary<TKey, TValue>>(ref reader, options);

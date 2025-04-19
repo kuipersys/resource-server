@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Kuiper.ServiceInfra.Abstractions" />
+    <PackageReference Include="Kuiper.ServiceInfra.Persistence" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\Platform\Kuiper.Platform.ManagementObjects\Kuiper.Platform.ManagementObjects.csproj" />
+    <ProjectReference Include="..\..\Platform\Kuiper.Platform.Runtime.Abstractions\Kuiper.Platform.Runtime.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Platform\Kuiper.Platform.Runtime\Kuiper.Platform.Runtime.csproj" />
+  </ItemGroup>
+
+</Project>

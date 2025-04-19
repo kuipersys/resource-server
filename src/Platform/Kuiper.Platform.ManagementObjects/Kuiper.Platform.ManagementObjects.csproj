@@ -14,7 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Kuiper.Platform.Framework.Abstractions\Kuiper.Platform.Framework.Abstractions.csproj" />
     <ProjectReference Include="..\Kuiper.Platform.Serialization\Kuiper.Platform.Serialization.csproj" />
   </ItemGroup>
 

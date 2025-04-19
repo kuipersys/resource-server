@@ -1,0 +1,1 @@
+{"$type":"SystemObject","apiVersion":"stable.example.com/v1","kind":"Shirt","metadata":{"name":"test","namespace":"default"}}

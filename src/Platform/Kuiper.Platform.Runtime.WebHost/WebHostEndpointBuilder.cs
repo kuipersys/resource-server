@@ -18,7 +18,8 @@ namespace Kuiper.Platform.Runtime.WebHost
         {
             var pipeline = endpoints
                 .CreateApplicationBuilder()
-                .UseMiddleware<KuiperWebHostMiddleware>()
+                .UseMiddleware<TraceIdentifierMiddleware>()
+                .UseMiddleware<PlatformRuntimeMiddleware>()
                 .Use(async (HttpContext context, RequestDelegate next) =>
                 {
                     context.Response.StatusCode = 404; // Set the response status code to 404

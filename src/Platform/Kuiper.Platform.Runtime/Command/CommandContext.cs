@@ -9,7 +9,7 @@ namespace Kuiper.Platform.Runtime.Command
     using Kuiper.Platform.Runtime.Abstractions.Command;
     using Kuiper.Platform.Serialization.Serialization;
 
-    internal class CommandContext : ICommandContext
+    internal class CommandContext : ICommandExecutionContext
     {
         public CommandContext(
             IServiceProvider services,

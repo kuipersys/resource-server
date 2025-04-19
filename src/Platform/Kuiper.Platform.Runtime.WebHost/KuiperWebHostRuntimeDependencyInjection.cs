@@ -1,4 +1,4 @@
-﻿// <copyright file="DependencyInjection.cs" company="Kuiper Microsystems, LLC">
+﻿// <copyright file="KuiperWebHostRuntimeDependencyInjection.cs" company="Kuiper Microsystems, LLC">
 // © Kuiper Microsystems, LLC. All rights reserved.
 // Unauthorized copying or use of this file, via any medium, is strictly prohibited.
 // For licensing inquiries, contact licensing@kuipersys.com
@@ -11,7 +11,7 @@ namespace Microsoft.Extensions.DependencyInjection
     using System;
 
     using Kuiper.Platform.Runtime.WebHost;
-    using Kuiper.Platform.Runtime.WebHost.Command;
+    using Kuiper.Platform.Runtime.WebHost.BackgroundJobs;
     using Kuiper.Platform.Runtime.WebHost.Middleware;
 
     using Microsoft.AspNetCore.Builder;
@@ -24,17 +24,17 @@ namespace Microsoft.Extensions.DependencyInjection
             services.RemoveAll<AspNetCore.Mvc.Infrastructure.IActionContextAccessor>();
             services.RemoveAll<AspNetCore.Mvc.Infrastructure.IActionInvokerFactory>();
 
-            if (services == null)
-            {
-                throw new ArgumentNullException(nameof(services));
-            }
+            ArgumentNullException.ThrowIfNull(services);
 
             services.AddAuthorization();
+            services.AddHealthChecks();
             services.AddKuiperRuntime();
 
+            services.AddHostedService<RuntimeInitializationService>();
+
             // Internal Services
-            services.AddSingleton<KuiperWebHostMiddleware>();
-            services.AddSingleton<IHttpContextCommandFactory, HttpContextCommandFactory>();
+            services.AddSingleton<PlatformRuntimeMiddleware>();
+            services.AddSingleton<TraceIdentifierMiddleware>();
 
             // Add any additional services specific to the web host runtime here.
             return services;
@@ -42,14 +42,12 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static WebApplication UseKuiperWebHostRuntime(this WebApplication app)
         {
-            if (app == null)
-            {
-                throw new ArgumentNullException(nameof(app));
-            }
+            ArgumentNullException.ThrowIfNull(app);
 
             // Configure the middleware pipeline for the web host runtime.
             app.UseAuthorization();
             app.MapKuiperWebHostRuntimeEndpoints();
+            app.MapHealthChecks("/healthz");
 
             // Add any additional middleware specific to the web host runtime here.
             return app;

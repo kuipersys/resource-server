@@ -4,8 +4,11 @@
 // For licensing inquiries, contact licensing@kuipersys.com
 // </copyright>
 
-namespace Kuiper.ResourceServer.Service.Core
+namespace Kuiper.ResourceServer.Runtime.Core
 {
+    using System.Threading;
+    using System.Threading.Tasks;
+
     using Kuiper.Platform.ManagementObjects.v1alpha1.Resource;
 
     public interface IResourceManager
@@ -15,5 +18,7 @@ namespace Kuiper.ResourceServer.Service.Core
         Task<ResourceDefinitionVersion?> GetResourceVersionAsync(string group, string kind, string groupVersion);
 
         Task<ResourceDefinition?> GetResourceDefinitionAsync(string group, string kind);
+
+        internal Task InitializeAsync(CancellationToken cancellationToken);
     }
 }

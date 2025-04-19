@@ -31,7 +31,7 @@ namespace Kuiper.Platform.Framework
         public string Message { get; set; }
 
         [JsonPropertyOrder(2)]
-        public string RequestId { get; set; }
+        public string ActivityId { get; set; }
 
         [JsonPropertyOrder(3)]
         public RequestStatus Status { get; set; } = new RequestStatus();

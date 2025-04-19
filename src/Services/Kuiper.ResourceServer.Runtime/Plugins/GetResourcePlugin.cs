@@ -4,14 +4,20 @@
 // For licensing inquiries, contact licensing@kuipersys.com
 // </copyright>
 
-namespace Kuiper.ResourceServer.Service.Plugins
+namespace Kuiper.ResourceServer.Runtime.Plugins
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+
     using Kuiper.Platform.ManagementObjects;
     using Kuiper.Platform.Runtime.Abstractions.Extensibility;
     using Kuiper.Platform.Runtime.Errors;
     using Kuiper.Platform.Runtime.Execution.Attributes;
     using Kuiper.Platform.Serialization.Serialization;
     using Kuiper.ServiceInfra.Abstractions.Persistence;
+
+    using Microsoft.Extensions.DependencyInjection;
 
     [RequiredInput("target", typeof(ResourceDescriptor))]
     internal class GetResourcePlugin : IPlugin

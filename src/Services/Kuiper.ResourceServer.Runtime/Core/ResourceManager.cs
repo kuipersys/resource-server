@@ -4,24 +4,27 @@
 // For licensing inquiries, contact licensing@kuipersys.com
 // </copyright>
 
-namespace Kuiper.ResourceServer.Service.Core
+namespace Kuiper.ResourceServer.Runtime.Core
 {
+    using System;
+    using System.Collections.Generic;
     using System.Threading;
+    using System.Threading.Tasks;
 
     using Kuiper.Platform.ManagementObjects;
     using Kuiper.Platform.ManagementObjects.v1alpha1.Resource;
-    using Kuiper.Platform.Modules;
+    using Kuiper.Platform.Runtime.Abstractions.Initialization;
     using Kuiper.Platform.Serialization.Serialization;
     using Kuiper.ServiceInfra.Abstractions.Persistence;
 
-    internal sealed class ResourceManager : IResourceManager
+    internal sealed class ResourceManager : IResourceManager, IInitializationTask, IDisposable
     {
         private readonly IKeyValueStore store;
 
-        private readonly IDictionary<string, ResourceDefinition> resources
+        private readonly Dictionary<string, ResourceDefinition> resources
             = new Dictionary<string, ResourceDefinition>(StringComparer.OrdinalIgnoreCase);
 
-        private readonly IDictionary<string, ResourceDefinitionVersion> resourceVersions
+        private readonly Dictionary<string, ResourceDefinitionVersion> resourceVersions
             = new Dictionary<string, ResourceDefinitionVersion>(StringComparer.OrdinalIgnoreCase);
 
         private bool isInitialized = false;
@@ -89,7 +92,7 @@ namespace Kuiper.ResourceServer.Service.Core
             }
         }
 
-        internal async Task InitializeAsync()
+        public async Task InitializeAsync(CancellationToken cancellationToken)
         {
             if (!this.semaphoreSlim.Wait(TimeSpan.FromSeconds(5)))
             {
@@ -179,6 +182,11 @@ namespace Kuiper.ResourceServer.Service.Core
 
                 this.resourceVersions.Add(version.Key, version.Value);
             }
+        }
+
+        public void Dispose()
+        {
+            this.semaphoreSlim?.Dispose();
         }
     }
 }

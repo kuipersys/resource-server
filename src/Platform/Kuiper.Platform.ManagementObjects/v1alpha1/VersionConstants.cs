@@ -6,7 +6,7 @@
 
 namespace Kuiper.Platform.ManagementObjects.v1alpha1
 {
-    internal static class VersionConstants
+    public static class VersionConstants
     {
         public const string Version = "v1alpha1";
         public const string ResourceDefinitionName = "$self";

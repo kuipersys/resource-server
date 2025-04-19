@@ -13,18 +13,6 @@ namespace Kuiper.Platform.Runtime.Abstractions.Command
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public sealed class CommandAttribute : Attribute
     {
-        public string Module { get; } = string.Empty;
-
-        public string Resource { get; }
-
-        public string Verb { get; }
-
-        public string? Description { get; }
-
-        public bool Disable { get; } = true;
-
-        public string CommandId { get; }
-
         public CommandAttribute(string verb, string? description = null, string? module = null, string? resource = null, bool disable = false)
         {
             this.Verb = verb.ToLowerInvariant();
@@ -52,6 +40,18 @@ namespace Kuiper.Platform.Runtime.Abstractions.Command
 
             this.CommandId = this.AsCommandIdentifier();
         }
+
+        public string Module { get; } = string.Empty;
+
+        public string Resource { get; }
+
+        public string Verb { get; }
+
+        public string? Description { get; }
+
+        public bool Disable { get; } = true;
+
+        public string CommandId { get; }
 
         public static bool IsValidCommandName(string commandName)
             => Regex.IsMatch(commandName, "^[a-z0-9-]+$");

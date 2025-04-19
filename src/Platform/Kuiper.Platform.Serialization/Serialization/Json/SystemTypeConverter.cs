@@ -10,7 +10,7 @@ namespace Kuiper.Platform.Serialization.Serialization.Json
     using System.Text.Json;
     using System.Text.Json.Serialization;
 
-    internal class SystemTypeConverter : JsonConverter<Type>
+    internal sealed class SystemTypeConverter : JsonConverter<Type>
     {
         public override Type Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {

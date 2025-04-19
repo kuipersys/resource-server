@@ -4,35 +4,38 @@
 // For licensing inquiries, contact licensing@kuipersys.com
 // </copyright>
 
-namespace Kuiper.ResourceServer.Service.Plugins
+namespace Kuiper.ResourceServer.Runtime.Plugins
 {
+    using System;
+    using System.Globalization;
+    using System.Linq;
+    using System.Threading.Tasks;
+
     using Kuiper.Platform.ManagementObjects;
     using Kuiper.Platform.ManagementObjects.v1alpha1.Resource;
     using Kuiper.Platform.Runtime.Abstractions.Extensibility;
     using Kuiper.Platform.Runtime.Errors;
     using Kuiper.Platform.Serialization.Serialization;
-    using Kuiper.ResourceServer.Service.Core;
+    using Kuiper.ResourceServer.Runtime.Core;
 
-    using Microsoft.CodeAnalysis;
+    using Microsoft.Extensions.DependencyInjection;
 
     internal class ValidationPlugin : IPlugin
     {
         private readonly IResourceManager resourceManager;
-        private readonly IHttpClientFactory httpClientFactory;
         private readonly NJsonSchema.JsonSchema systemObjectSchema;
 
-        public ValidationPlugin(IResourceManager resourceManager, IHttpClientFactory httpClientFactory)
+        public ValidationPlugin(IResourceManager resourceManager)
         {
-            this.httpClientFactory = httpClientFactory;
             this.resourceManager = resourceManager;
-            this.systemObjectSchema = SystemSchema.GetSchema<SystemObject>()!;
+            this.systemObjectSchema = SystemSchema.GetSchema<SystemObject>() !;
         }
 
         public async Task ExecuteAsync(IServiceProvider serviceProvider)
         {
             var context = serviceProvider.GetRequiredService<IRuntimeExecutionContext>();
 
-            switch (context.Message.ToLower())
+            switch (context.Message.ToLower(CultureInfo.InvariantCulture))
             {
                 case "get":
                 case "list":
@@ -76,7 +79,7 @@ namespace Kuiper.ResourceServer.Service.Plugins
 
         private async Task ValidateMutationAsync(IRuntimeExecutionContext context, bool hasSystemObjectTarget = true)
         {
-            if (!context.InputParameters.ContainsKey("target") || context.InputParameters["target"] == null)
+            if (!context.InputParameters.TryGetValue("target", out object? value) || value == null)
             {
                 throw new ArgumentException("The request payload is mising", "target");
             }
@@ -85,12 +88,11 @@ namespace Kuiper.ResourceServer.Service.Plugins
 
             if (hasSystemObjectTarget)
             {
-                var systemObject = context.InputParameters["target"]
-                    .MarshalAs<SystemObject>();
+                var systemObject = value.MarshalAs<SystemObject>();
 
                 var resourceDescriptor = systemObject.AsResourceDescriptor();
 
-                if (!allowSystemModification && resourceDescriptor.Name.StartsWith("$"))
+                if (!allowSystemModification && resourceDescriptor.Name!.StartsWith("$", StringComparison.OrdinalIgnoreCase))
                 {
                     throw new PlatformRuntimeException(
                         "System resources cannot be modified",
@@ -102,10 +104,9 @@ namespace Kuiper.ResourceServer.Service.Plugins
             }
             else
             {
-                var resourceDescriptor = context.InputParameters["target"]
-                    .MarshalAs<ResourceDescriptor>();
+                var resourceDescriptor = value.MarshalAs<ResourceDescriptor>();
 
-                if (!allowSystemModification && resourceDescriptor.Name.StartsWith("$"))
+                if (!allowSystemModification && resourceDescriptor.Name!.StartsWith("$", StringComparison.OrdinalIgnoreCase))
                 {
                     throw new PlatformRuntimeException(
                         "System resources cannot be modified",
@@ -146,7 +147,7 @@ namespace Kuiper.ResourceServer.Service.Plugins
             if (resourceDefinition == null)
             {
                 throw new PlatformRuntimeException(
-                    $"Invalid Resource Kind: {resourceDescriptor.ApiVersion}/{resourceDescriptor.Kind}",
+                    $"Invalid Resource Kind: {resourceDescriptor.Group}/{resourceDescriptor.Kind}",
                     PlatformRuntimeErrorCodes.InvalidResourceKind);
             }
 

@@ -10,7 +10,7 @@ namespace Kuiper.Platform.Runtime.Abstractions.Command
     using System.Collections.Generic;
     using System.Threading;
 
-    public interface ICommandContext
+    public interface ICommandExecutionContext
     {
         string CommandName { get; }
 

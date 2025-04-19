@@ -24,7 +24,7 @@ namespace Kuiper.Platform.Runtime.Command
                 .ToDictionary(h => this.GetCommandName(h), StringComparer.OrdinalIgnoreCase);
         }
 
-        public async Task<ICommandResult> DispatchAsync(ICommandContext context)
+        public async Task<ICommandResult> DispatchAsync(ICommandExecutionContext context)
         {
             if (!this.handlers.TryGetValue(context.CommandName, out var handler))
             {

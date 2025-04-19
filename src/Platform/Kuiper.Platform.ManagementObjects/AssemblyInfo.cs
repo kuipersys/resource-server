@@ -6,5 +6,4 @@
 
 using System.Runtime.CompilerServices;
 
-[assembly:InternalsVisibleTo("Kuiper.Platform.Modules")]
 [assembly:InternalsVisibleTo("Kuiper.Platform.ManagementObjects.UnitTests")]

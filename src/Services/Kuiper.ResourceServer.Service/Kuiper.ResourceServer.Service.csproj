@@ -18,13 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Platform\Kuiper.Platform.Runtime.Abstractions\Kuiper.Platform.Runtime.Abstractions.csproj" />
     <ProjectReference Include="..\..\Platform\Kuiper.Platform.Runtime.WebHost\Kuiper.Platform.Runtime.WebHost.csproj" />
-    <ProjectReference Include="..\..\Platform\Kuiper.Platform.ManagementObjects\Kuiper.Platform.ManagementObjects.csproj" />
-    <ProjectReference Include="..\..\Platform\Kuiper.Platform.Modules\Kuiper.Platform.Modules.csproj" />
-    <ProjectReference Include="..\..\Platform\Kuiper.Platform.Runtime\Kuiper.Platform.Runtime.csproj" />
-    <ProjectReference Include="..\..\Platform\Kuiper.Platform.Framework\Kuiper.Platform.Framework.csproj" />
-    <ProjectReference Include="..\..\Platform\Kuiper.Platform.Serialization\Kuiper.Platform.Serialization.csproj" />
+    <ProjectReference Include="..\Kuiper.ResourceServer.Runtime\Kuiper.ResourceServer.Runtime.csproj" />
   </ItemGroup>
 
 </Project>

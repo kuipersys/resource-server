@@ -40,7 +40,7 @@ namespace Kuiper.Platform.Framework
         public string Message { get; set; } = string.Empty;
 
         [JsonPropertyOrder(2)]
-        public string? RequestId { get; set; }
+        public string? ActivityId { get; set; }
 
         [JsonPropertyOrder(3)]
         public string? TraceId { get; set; }
@@ -61,12 +61,12 @@ namespace Kuiper.Platform.Framework
         protected static string ConvertName(string name)
             => JsonNamingPolicy.CamelCase.ConvertName(name);
 
-        public void PrepareRequest(string? traceId = null)
+        public void PrepareRequest(string activityId, string? traceId = null)
         {
             this.InputParameters["$type"] = $"{this.Message}Request";
 
             // Set Request Id
-            this.RequestId = this.RequestId ?? Guid.NewGuid().ToString();
+            this.ActivityId = activityId;
 
             // Initialize Trace Id and Trim
             this.TraceId = traceId ?? this.TraceId;

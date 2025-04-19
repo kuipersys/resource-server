@@ -17,12 +17,12 @@ namespace Kuiper.Platform.Runtime
     public class PlatformRuntime
     {
         private readonly IPluginRuntime pluginRuntime;
-        private readonly Func<IServiceCollection, Task> configureExecutionServices;
+        private readonly Func<IServiceCollection, Task> configureRuntimeServices;
 
-        public PlatformRuntime(IPluginRuntime pluginRuntime, Func<IServiceCollection, Task> configureExecutionServices = null)
+        public PlatformRuntime(IPluginRuntime pluginRuntime, Func<IServiceCollection, Task> configureRuntimeServices = null)
         {
             this.pluginRuntime = pluginRuntime;
-            this.configureExecutionServices = configureExecutionServices;
+            this.configureRuntimeServices = configureRuntimeServices;
         }
 
         protected event EventHandler<IServiceProvider>? OnValidating;
@@ -48,7 +48,7 @@ namespace Kuiper.Platform.Runtime
                 return new PlatformResponse
                 {
                     Message = request.Message,
-                    RequestId = request.RequestId,
+                    ActivityId = request.ActivityId,
                     Status =
                     {
                         Message = ex.Message,
@@ -67,9 +67,9 @@ namespace Kuiper.Platform.Runtime
             IServiceCollection descriptors = new ServiceCollection();
             descriptors.AddSingleton<IRuntimeExecutionContext>(context);
 
-            if (this.configureExecutionServices != null)
+            if (this.configureRuntimeServices != null)
             {
-                await this.configureExecutionServices.Invoke(descriptors);
+                await this.configureRuntimeServices.Invoke(descriptors);
             }
 
             using ServiceProvider services = descriptors.BuildServiceProvider();

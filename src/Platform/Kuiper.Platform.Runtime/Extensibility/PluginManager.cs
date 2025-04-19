@@ -49,7 +49,7 @@ namespace Kuiper.Platform.Runtime.Extensibility
                 case OperationStep.PostOperation:
                 case OperationStep.Operation:
                     var stepOperations = this.operations[step][message];
-                    stepOperations.Insert(order, plugin);
+                    stepOperations.Insert(0, plugin);
                     break;
 
                 default:

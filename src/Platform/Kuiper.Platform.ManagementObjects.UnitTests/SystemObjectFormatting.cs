@@ -6,7 +6,6 @@
 
 namespace Kuiper.Platform.ManagementObjects.UnitTests
 {
-    using Kuiper.Platform.Framework;
     using Kuiper.Platform.ManagementObjects;
     using Kuiper.Platform.ManagementObjects.v1alpha1.Resource;
     using Kuiper.Platform.Serialization.Serialization;
@@ -33,8 +32,8 @@ namespace Kuiper.Platform.ManagementObjects.UnitTests
                         { "env", "prod" },
                         { "Xavier", "saves" },
                         { "the", "day" },
-                    }
-                }
+                    },
+                },
             };
 
             systemObject
@@ -59,9 +58,9 @@ namespace Kuiper.Platform.ManagementObjects.UnitTests
                         { "the", "day" },
                         { "geo", "us" },
                         { "region", "westus" },
-                        { "env", "prod" }
-                    }
-                }
+                        { "env", "prod" },
+                    },
+                },
             };
 
             systemObject
@@ -89,24 +88,5 @@ namespace Kuiper.Platform.ManagementObjects.UnitTests
                 .ObjectToJson(true)
                 .MatchSnapshot();
         }
-
-        //[Fact]
-        //public void GenerateSchemaWithNSwag()
-        //{
-        //    var schema = JsonSchemaGenerator.FromType(typeof(SystemObject), new NewtonsoftJsonSchemaGeneratorSettings()
-        //    {
-        //        SchemaType = NJsonSchema.SchemaType.OpenApi3,
-        //        FlattenInheritanceHierarchy = true,
-        //        UseXmlDocumentation = true
-        //    });
-
-        //    var objectSchema = schema.Definitions
-        //        .First()
-        //        .Value;
-
-        //    objectSchema.ToJson()
-        //        .JsonToYaml()
-        //        .MatchSnapshot();
-        //}
     }
 }

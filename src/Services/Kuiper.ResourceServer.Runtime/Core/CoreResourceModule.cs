@@ -4,14 +4,13 @@
 // For licensing inquiries, contact licensing@kuipersys.com
 // </copyright>
 
-using Kuiper.Platform.ManagementObjects;
-using Kuiper.Platform.ManagementObjects.v1alpha1;
-
-namespace Kuiper.Platform.Modules
+namespace Kuiper.ResourceServer.Runtime.Core
 {
     using System;
-    using System.Threading.Tasks;
+    using System.Globalization;
 
+    using Kuiper.Platform.ManagementObjects;
+    using Kuiper.Platform.ManagementObjects.v1alpha1;
     using Kuiper.Platform.ManagementObjects.v1alpha1.Resource;
 
     /// <summary>
@@ -41,8 +40,8 @@ namespace Kuiper.Platform.Modules
                 Names = new ResourceDefinitionNames()
                 {
                     Kind = nameof(ResourceDefinition),
-                    Plural = $"{nameof(ResourceDefinition).ToLower()}s",
-                    Singular = $"{nameof(ResourceDefinition).ToLower()}",
+                    Plural = $"{nameof(ResourceDefinition).ToLower(CultureInfo.InvariantCulture)}s",
+                    Singular = $"{nameof(ResourceDefinition).ToLower(CultureInfo.InvariantCulture)}",
                     ShortNames = new string[] { $"resource" },
                 },
                 Versions = new ResourceDefinitionVersion[]

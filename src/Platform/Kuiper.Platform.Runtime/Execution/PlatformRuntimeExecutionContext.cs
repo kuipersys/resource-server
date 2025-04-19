@@ -76,7 +76,7 @@ namespace Kuiper.Platform.Runtime.Execution
             var response = new PlatformResponse
             {
                 Message = this.Message,
-                RequestId = this.Request.RequestId,
+                ActivityId = this.Request.ActivityId,
             };
 
             response.ExtensionData.Add("$type", $"{this.Message}Response");
