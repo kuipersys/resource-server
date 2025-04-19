@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Kuiper.ServiceInfra.Abstractions" />
     <PackageReference Include="Kuiper.ServiceInfra.Persistence" />
+    <PackageReference Include="LiteDB" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
   </ItemGroup>

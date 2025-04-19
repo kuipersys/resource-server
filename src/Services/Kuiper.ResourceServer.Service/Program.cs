@@ -6,6 +6,7 @@
 
 namespace Kuiper.ResourceServer.Service;
 
+using Kuiper.ResourceServer.Runtime.Data;
 using Kuiper.ServiceInfra.Abstractions.Persistence;
 using Kuiper.ServiceInfra.Persistence;
 
@@ -23,7 +24,7 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
         builder.Services.AddResourceServerRuntime();
         builder.Services.AddKuiperWebHostRuntime();
-        builder.Services.AddSingleton(services => CreateKeyValueStore(services.GetRequiredService<IConfiguration>()));
+        builder.Services.AddSingleton(services => CreateLiteDbKeyValueStore(services.GetRequiredService<IConfiguration>()));
 
         var app = builder.Build();
         app.UseKuiperWebHostRuntime();
@@ -31,7 +32,14 @@ public class Program
         app.Run();
     }
 
-    private static IKeyValueStore CreateKeyValueStore(IConfiguration configuration)
+    private static IKeyValueStore CreateLiteDbKeyValueStore(IConfiguration configuration)
+    {
+        string dbFile = configuration["Kuiper:KeyValueStore:Path"] ?? "./data/primary_store.db";
+
+        return new LiteDbKeyValueStore(dbFile, "resources");
+    }
+
+    private static IKeyValueStore CreateFileBasedKeyValueStore(IConfiguration configuration)
     {
         string path = configuration["Kuiper:KeyValueStore:Path"] ?? "./data";
 

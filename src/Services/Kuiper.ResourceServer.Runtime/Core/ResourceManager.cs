@@ -90,20 +90,33 @@ namespace Kuiper.ResourceServer.Runtime.Core
 
         public async Task InitializeAsync(CancellationToken cancellationToken)
         {
+            await this.InitializeCoreResourceDefinitionsAsync();
+            await this.ReloadAsync(cancellationToken);
+        }
+
+        private async Task InitializeCoreResourceDefinitionsAsync()
+        {
             if (!this.semaphoreSlim.Wait(TimeSpan.FromSeconds(5)))
             {
                 throw new TimeoutException("ResourceManager bootstrap semaphore timed out.");
             }
 
+            if (this.isInitialized)
+            {
+                return;
+            }
+
             try
             {
-                if (this.isInitialized)
+                var coreResourceDefinitions = CoreResourceModule.GetResourceDefinitions();
+                foreach (var resourceDefinition in coreResourceDefinitions)
                 {
-                    return;
+                    await PersistResourceDefinitionAsync(this.store, resourceDefinition);
+
+                    this.AddResourceDefinition(resourceDefinition);
                 }
 
-                await this.InitializeCoreResourceDefinitionsAsync();
-                await this.ReloadAsync(cancellationToken);
+                this.isInitialized = true;
             }
             finally
             {
@@ -111,20 +124,12 @@ namespace Kuiper.ResourceServer.Runtime.Core
             }
         }
 
-        private async Task InitializeCoreResourceDefinitionsAsync()
-        {
-            var coreResourceDefinitions = CoreResourceModule.GetResourceDefinitions();
-            foreach (var resourceDefinition in coreResourceDefinitions)
-            {
-                await PersistResourceDefinitionAsync(this.store, resourceDefinition);
-
-                this.AddResourceDefinition(resourceDefinition);
-            }
-        }
-
         public async Task ReloadAsync(CancellationToken cancellationToken = default)
         {
             await this.semaphoreSlim.WaitAsync(cancellationToken);
+
+            this.resources.Clear();
+            this.resourceVersions.Clear();
 
             try
             {

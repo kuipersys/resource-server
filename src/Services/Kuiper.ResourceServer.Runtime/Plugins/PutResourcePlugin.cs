@@ -68,6 +68,11 @@ namespace Kuiper.ResourceServer.Runtime.Plugins
 
                 var data = await store.GetAsync(resourceId, context.CancellationToken);
                 context.OutputParameters["result"] = data.JsonBytesToObject<SystemObject>();
+
+                if (systemObject.Kind == "ResourceDefinition")
+                {
+                    await resourceManager.ReloadAsync(context.CancellationToken);
+                }
             }
             catch (KeyNotFoundException ex)
             {

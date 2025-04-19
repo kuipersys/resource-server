@@ -20,5 +20,7 @@ namespace Kuiper.ResourceServer.Runtime.Core
         Task<ResourceDefinition?> GetResourceDefinitionAsync(string group, string kind);
 
         internal Task InitializeAsync(CancellationToken cancellationToken);
+
+        internal Task ReloadAsync(CancellationToken cancellationToken);
     }
 }
