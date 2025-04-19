@@ -1,5 +1,5 @@
 ﻿{
-  "$type": "PlatformRequestExecutionContext",
+  "$type": "PlatformRuntimeExecutionContext",
   "inputParameters": {
     "target": {
       "$type": "SystemObject",

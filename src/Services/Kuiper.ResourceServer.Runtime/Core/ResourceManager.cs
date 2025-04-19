@@ -35,23 +35,19 @@ namespace Kuiper.ResourceServer.Runtime.Core
             this.store = store;
         }
 
-        public async Task<bool> ResourceVersionExists(string group, string kind, string groupVersion)
+        public Task<bool> ResourceVersionExists(string group, string kind, string groupVersion)
         {
-            await this.LoadAsync();
-
-            return this.resourceVersions.ContainsKey($"{group}/{kind}/{groupVersion}");
+            return Task.FromResult(this.resourceVersions.ContainsKey($"{group}/{kind}/{groupVersion}"));
         }
 
-        public async Task<ResourceDefinitionVersion?> GetResourceVersionAsync(string group, string kind, string groupVersion)
+        public Task<ResourceDefinitionVersion?> GetResourceVersionAsync(string group, string kind, string groupVersion)
         {
-            await this.LoadAsync();
-
             if (this.resourceVersions.TryGetValue($"{group}/{kind}/{groupVersion}", out var resourceDefinition))
             {
-                return resourceDefinition;
+                return Task.FromResult<ResourceDefinitionVersion?>(resourceDefinition);
             }
 
-            return null;
+            return Task.FromResult<ResourceDefinitionVersion?>(null);
         }
 
         public Task<ResourceDefinition?> GetResourceDefinitionAsync(string group, string kind)
@@ -66,7 +62,7 @@ namespace Kuiper.ResourceServer.Runtime.Core
             }
         }
 
-        internal static async Task PersistResourceDefinitionAsync(IKeyValueStore store, ResourceDefinition resourceDefinition, bool overwrite = false, CancellationToken cancellationToken = default)
+        private static async Task PersistResourceDefinitionAsync(IKeyValueStore store, ResourceDefinition resourceDefinition, bool overwrite = false, CancellationToken cancellationToken = default)
         {
             if (store == null)
             {
@@ -107,7 +103,7 @@ namespace Kuiper.ResourceServer.Runtime.Core
                 }
 
                 await this.InitializeCoreResourceDefinitionsAsync();
-                await this.LoadAsync(CancellationToken.None);
+                await this.ReloadAsync(cancellationToken);
             }
             finally
             {
@@ -126,34 +122,43 @@ namespace Kuiper.ResourceServer.Runtime.Core
             }
         }
 
-        private async Task LoadAsync(CancellationToken cancellationToken = default)
+        public async Task ReloadAsync(CancellationToken cancellationToken = default)
         {
-            var resourceDescriptor = new ResourceDescriptor
-            {
-                Namespace = SystemConstants.Resources.GLOBAL_NAMESPACE,
-                Group = SystemConstants.Resources.SYSTEM_EXTENSION_GROUP,
-                Kind = nameof(ResourceDefinition),
-            };
+            await this.semaphoreSlim.WaitAsync(cancellationToken);
 
-            var objects = await this.store.ScanValuesAsync(resourceDescriptor.ToResourcePrefix(), cancellationToken);
-
-            foreach (var objectData in objects)
+            try
             {
-                try
+                var resourceDescriptor = new ResourceDescriptor
                 {
-                    var resourceDefinition = objectData.Value.JsonBytesToObject<ResourceDefinition>();
+                    Namespace = SystemConstants.Resources.GLOBAL_NAMESPACE,
+                    Group = SystemConstants.Resources.SYSTEM_EXTENSION_GROUP,
+                    Kind = nameof(ResourceDefinition),
+                };
 
-                    if (resourceDefinition == null)
+                var objects = await this.store.ScanValuesAsync(resourceDescriptor.ToResourcePrefix(), cancellationToken);
+
+                foreach (var objectData in objects)
+                {
+                    try
                     {
-                        throw new InvalidOperationException("Resource definition is null.");
-                    }
+                        var resourceDefinition = objectData.Value.JsonBytesToObject<ResourceDefinition>();
 
-                    this.AddResourceDefinition(resourceDefinition);
+                        if (resourceDefinition == null)
+                        {
+                            throw new InvalidOperationException("Resource definition is null.");
+                        }
+
+                        this.AddResourceDefinition(resourceDefinition);
+                    }
+                    catch (Exception ex)
+                    {
+                        // TODO: Error handling
+                    }
                 }
-                catch (Exception ex)
-                {
-                    // TODO: Error handling
-                }
+            }
+            finally
+            {
+                this.semaphoreSlim.Release();
             }
         }
 

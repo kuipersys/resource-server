@@ -10,6 +10,6 @@ namespace Kuiper.Platform.Runtime.Extensibility
 
     public interface IPluginProvider
     {
-        IEnumerable<IPlugin> ResolvePlugins(OperationStep step, string message);
+        IEnumerable<IPlugin> Resolve(OperationStep operationStep, string message);
     }
 }

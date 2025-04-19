@@ -29,7 +29,7 @@ namespace Kuiper.Platform.Runtime.Extensibility
 
             var executionContext = serviceProvider.GetRequiredService<IRuntimeExecutionContext>();
 
-            foreach (var plugin in this.pluginProvider.ResolvePlugins(executionContext.Step, executionContext.Message))
+            foreach (var plugin in this.pluginProvider.Resolve(executionContext.Step, executionContext.Message))
             {
                 // Cancellation Requested
                 if (executionContext.CancellationToken.IsCancellationRequested)
